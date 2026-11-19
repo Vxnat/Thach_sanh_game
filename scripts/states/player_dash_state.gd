@@ -21,6 +21,7 @@ func enter(_prev_state: StringName, _msg: Dictionary = {}) -> void:
 	_spawned_mid_ghost = false
 	player.velocity = Vector2(float(player.facing_direction) * player.dash_speed, 0.0)
 	player.play_locomotion_anim(&"dash")
+	AudioManager.play_sfx(&"dash", 0.96, 1.06)
 	player.spawn_dash_afterimage()
 
 

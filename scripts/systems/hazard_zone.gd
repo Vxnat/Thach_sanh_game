@@ -7,6 +7,7 @@ extends Area2D
 @export var hazard_size: Vector2 = Vector2(48.0, 32.0)
 
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var _stream_audio: AudioStreamPlayer2D = get_node_or_null("StreamAudio") as AudioStreamPlayer2D
 
 
 func _ready() -> void:
@@ -30,6 +31,13 @@ func _ready() -> void:
 		rect.size = hazard_size
 
 	body_entered.connect(_on_body_entered)
+
+	if _stream_audio != null:
+		var flow_stream: AudioStream = AudioManager.get_stream(&"amb_stream_flow")
+		if flow_stream != null:
+			_stream_audio.stream = flow_stream
+			if not _stream_audio.playing:
+				_stream_audio.play()
 
 
 func contains_player_body(player: Player) -> bool:

@@ -40,15 +40,15 @@ color = Color(0, 0, 0, 0.45)
 
 [node name="CenterPanel" type="PanelContainer" parent="RootControl"]
 layout_mode = 0
-offset_left = 28.0
-offset_top = 20.0
-offset_right = 356.0
-offset_bottom = 200.0
+offset_left = 24.0
+offset_top = 12.0
+offset_right = 360.0
+offset_bottom = 206.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_travel")
 
 [node name="VBox" type="VBoxContainer" parent="RootControl/CenterPanel"]
 layout_mode = 2
-theme_override_constants/separation = 5
+theme_override_constants/separation = 4
 
 [node name="HeaderRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
 layout_mode = 2
@@ -87,7 +87,7 @@ text_overrun_behavior = 3
 [node name="RouteBox" type="VBoxContainer" parent="RootControl/CenterPanel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 5
+theme_override_constants/separation = 3
 
 [node name="BtnTravel_hub_loc_tri" type="Button" parent="RootControl/CenterPanel/VBox/RouteBox"]
 layout_mode = 2
@@ -104,6 +104,12 @@ alignment = 0
 [node name="BtnTravel_stage_01" type="Button" parent="RootControl/CenterPanel/VBox/RouteBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
-text = "Màn 1: Rừng Ven Làng (Mở ở GĐ 3)"
+text = "Màn 1: Rừng Ven Làng (Đầu Rừng)"
+alignment = 0
+
+[node name="BtnTravel_stage_02" type="Button" parent="RootControl/CenterPanel/VBox/RouteBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Đèo Nhị Trụ Tùng (Khóa — Diệt quái gác cổng)"
 alignment = 0
 

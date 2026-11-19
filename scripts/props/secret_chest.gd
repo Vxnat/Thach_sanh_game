@@ -37,6 +37,7 @@ func _on_interacted(_player_node: Node2D) -> void:
 
 	GameState.mark_chest_opened(chest_id)
 	_apply_opened_visual(true)
+	AudioManager.play_sfx(&"chest_open", 0.98, 1.03)
 
 	var spawn_parent: Node = get_parent() if get_parent() != null else self
 	LootDropSystem.spawn_burst(

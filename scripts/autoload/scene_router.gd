@@ -59,6 +59,7 @@ func transition_to_stage(stage_id: String, spawn_id: StringName = &"default", fa
 
 	GameState.current_stage_id = stage_id
 	GameState.last_spawn_id = spawn_id
+	AudioManager.sync_stage_audio(stage_id)
 
 	var target_spawn: SpawnPoint = _find_spawn_point(spawn_id)
 	var new_player: Node = _find_player_in_current_scene()

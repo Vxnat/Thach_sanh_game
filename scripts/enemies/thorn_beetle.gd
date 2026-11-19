@@ -81,6 +81,7 @@ func modify_incoming_damage(hitbox: HitboxComponent, raw_damage: int) -> int:
 
 	var is_armor_breaker: bool = _is_heavy_armor_breaker_hit(hitbox)
 	if is_armor_breaker:
+		AudioManager.play_sfx(&"slam_impact", 1.05, 1.12, -2.0)
 		_exit_shell_guard(guard_cooldown + 0.4)
 		return raw_damage
 

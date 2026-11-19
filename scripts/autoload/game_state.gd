@@ -20,6 +20,7 @@ const STAGE_PATHS: Dictionary = {
 	"hub_loc_tri": "res://scenes/levels/hub_loc_tri.tscn",
 	"test_sandbox": "res://scenes/levels/test_sandbox.tscn",
 	"stage_01": "res://scenes/levels/stages/stage_01_rung_ven_lang.tscn",
+	"stage_02": "res://scenes/levels/stages/stage_02_nhi_tru_tung.tscn",
 }
 
 var has_active_session: bool = false
@@ -60,6 +61,7 @@ var story_flags: Dictionary = {
 	"met_ly_thong": false,
 	"met_tien_ong": false,
 	"defeated_chan_tinh": false,
+	"stage_01_cleared": false,
 }
 var current_stage_id: String = "test_sandbox"
 var last_spawn_id: StringName = &"default"
@@ -160,6 +162,7 @@ func reset_new_game() -> void:
 		"met_ly_thong": false,
 		"met_tien_ong": false,
 		"defeated_chan_tinh": false,
+		"stage_01_cleared": false,
 	}
 	current_stage_id = "test_sandbox"
 	last_spawn_id = &"default"
@@ -417,6 +420,18 @@ func is_chest_opened(chest_id: String) -> bool:
 func mark_chest_opened(chest_id: String) -> void:
 	if chest_id != "" and not opened_chests.has(chest_id):
 		opened_chests.append(chest_id)
+
+
+func is_stage_unlocked(stage_id: String) -> bool:
+	return unlocked_stages.has(stage_id)
+
+
+func unlock_stage(stage_id: String) -> bool:
+	if stage_id == "" or unlocked_stages.has(stage_id):
+		return false
+	unlocked_stages.append(stage_id)
+	EventBus.inventory_updated.emit()
+	return true
 
 
 func set_story_flag(flag_key: String, value: Variant) -> void:

@@ -17,4 +17,5 @@ func _ready() -> void:
 		GameState.reset_new_game()
 	GameState.current_stage_id = "hub_loc_tri"
 	GameState.set_ui_modal_open(false)
+	AudioManager.sync_stage_audio("hub_loc_tri")
 

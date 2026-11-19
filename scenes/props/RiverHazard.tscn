@@ -29,3 +29,9 @@ offset_right = 24.0
 offset_bottom = -14.0
 color = Color(0.68, 0.92, 1, 0.95)
 
+[node name="StreamAudio" type="AudioStreamPlayer2D" parent="."]
+volume_db = -3.0
+max_distance = 260.0
+attenuation = 1.35
+bus = &"Ambience"
+

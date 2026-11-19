@@ -8,9 +8,11 @@ var _jump_cut_applied: bool = false
 func enter(_prev_state: StringName, msg: Dictionary = {}) -> void:
 	if bool(msg.get("from_pogo", false)):
 		_jump_cut_applied = true
+		AudioManager.play_sfx(&"jump", 1.10, 1.16)
 	else:
 		_jump_cut_applied = false
 		player.consume_jump()
+		AudioManager.play_sfx(&"jump", 0.96, 1.05)
 	player.reset_combo()
 	player.play_locomotion_anim(&"jump")
 	if msg.has("step_delta"):

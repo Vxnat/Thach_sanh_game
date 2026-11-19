@@ -1,0 +1,358 @@
+[gd_scene load_steps=22 format=4]
+
+[ext_resource type="Script" path="res://scripts/levels/stage_01_rung_ven_lang.gd" id="1_stage01"]
+[ext_resource type="TileSet" uid="uid://drjwlkibapwe8" path="res://assets/sprites/tilesets/sandbox_tileset.tres" id="2_tiles"]
+[ext_resource type="Script" path="res://scripts/systems/day_night_light.gd" id="3_light"]
+[ext_resource type="Script" path="res://scripts/systems/spawn_point.gd" id="4_spawn"]
+[ext_resource type="PackedScene" path="res://scenes/props/StagePortal.tscn" id="5_portal"]
+[ext_resource type="PackedScene" path="res://scenes/props/VillageLantern.tscn" id="6_lantern"]
+[ext_resource type="PackedScene" path="res://scenes/props/RiverHazard.tscn" id="7_river"]
+[ext_resource type="PackedScene" path="res://scenes/props/SecretChest.tscn" id="8_chest"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/WildSquirrel.tscn" id="9_squirrel"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/GreenViper.tscn" id="10_viper"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/ThornBeetle.tscn" id="11_beetle"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/VillageNpc.tscn" id="12_npc"]
+[ext_resource type="Texture2D" uid="uid://cb8uw2oi5ba1" path="res://assets/sprites/npcs/npc_xa_phu.png" id="13_tex_xa_phu"]
+[ext_resource type="Script" path="res://scripts/components/interactable_area.gd" id="14_interact"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="15_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="16_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/TravelUI.tscn" id="17_travel_ui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="18_dialogue"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_stage01_atk"]
+resource_local_to_scene = true
+size = Vector2(22, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate_barrier"]
+size = Vector2(16, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nhi_tru_gate"]
+size = Vector2(32, 40)
+
+[node name="Stage01RungVenLang" type="Node2D"]
+script = ExtResource("1_stage01")
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="SkyRect" type="ColorRect" parent="BackgroundLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.53, 0.76, 0.9, 1)
+
+[node name="DayNightLight" type="CanvasModulate" parent="."]
+script = ExtResource("3_light")
+sky_rect_path = NodePath("../BackgroundLayer/SkyRect")
+
+[node name="WorldScenery" type="Node2D" parent="."]
+z_index = -5
+
+[node name="ForestRidges" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.24, 0.42, 0.34, 1)
+polygon = PackedVector2Array(0, 208, 0, 128, 180, 102, 360, 132, 540, 96, 760, 126, 980, 98, 1180, 134, 1420, 92, 1660, 126, 1920, 90, 2180, 118, 2400, 88, 2400, 208)
+
+[node name="TrailSignLabel" type="Label" parent="WorldScenery"]
+offset_left = 20.0
+offset_top = 156.0
+offset_right = 104.0
+offset_bottom = 170.0
+theme_override_colors/font_color = Color(0.95, 0.92, 0.78, 1)
+theme_override_font_sizes/font_size = 7
+text = "Rừng Ven Làng"
+horizontal_alignment = 1
+
+[node name="CanopyTrunkLeft" type="ColorRect" parent="WorldScenery"]
+offset_left = 252.0
+offset_top = 96.0
+offset_right = 278.0
+offset_bottom = 208.0
+color = Color(0.32, 0.22, 0.14, 1)
+
+[node name="CanopyTrunkRight" type="ColorRect" parent="WorldScenery"]
+offset_left = 420.0
+offset_top = 96.0
+offset_right = 442.0
+offset_bottom = 208.0
+color = Color(0.34, 0.23, 0.15, 1)
+
+[node name="CanopyFoliageLeft" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.18, 0.42, 0.22, 1)
+polygon = PackedVector2Array(208, 98, 240, 56, 312, 56, 338, 98)
+
+[node name="CanopyFoliageMid" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.21, 0.46, 0.25, 1)
+polygon = PackedVector2Array(384, 110, 412, 72, 476, 72, 496, 110)
+
+[node name="CanopyFoliageStep" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.2, 0.44, 0.24, 1)
+polygon = PackedVector2Array(498, 144, 524, 114, 574, 114, 590, 144)
+
+[node name="StreamBedBackdrop" type="ColorRect" parent="WorldScenery"]
+offset_left = 918.0
+offset_top = 206.0
+offset_right = 1114.0
+offset_bottom = 256.0
+color = Color(0.08, 0.24, 0.42, 1)
+
+[node name="StreamSignLabel" type="Label" parent="WorldScenery"]
+offset_left = 854.0
+offset_top = 158.0
+offset_right = 934.0
+offset_bottom = 172.0
+theme_override_colors/font_color = Color(0.82, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "Suối Sâu"
+horizontal_alignment = 1
+
+[node name="CavernBackdrop" type="ColorRect" parent="WorldScenery"]
+offset_left = 1468.0
+offset_top = 156.0
+offset_right = 1586.0
+offset_bottom = 212.0
+color = Color(0.14, 0.13, 0.18, 1)
+
+[node name="CavernArchHint" type="ColorRect" parent="WorldScenery"]
+offset_left = 1572.0
+offset_top = 144.0
+offset_right = 1588.0
+offset_bottom = 162.0
+color = Color(0.32, 0.34, 0.38, 1)
+
+[node name="ArenaPillarL" type="ColorRect" parent="WorldScenery"]
+offset_left = 1868.0
+offset_top = 148.0
+offset_right = 1882.0
+offset_bottom = 208.0
+color = Color(0.36, 0.35, 0.38, 1)
+
+[node name="ArenaPillarR" type="ColorRect" parent="WorldScenery"]
+offset_left = 2114.0
+offset_top = 148.0
+offset_right = 2128.0
+offset_bottom = 208.0
+color = Color(0.36, 0.35, 0.38, 1)
+
+[node name="ArenaSignLabel" type="Label" parent="WorldScenery"]
+offset_left = 1940.0
+offset_top = 120.0
+offset_right = 2070.0
+offset_bottom = 134.0
+theme_override_colors/font_color = Color(1, 0.82, 0.72, 1)
+theme_override_font_sizes/font_size = 7
+text = "Bãi Đá Gác Cổng"
+horizontal_alignment = 1
+
+[node name="OutpostCartBody" type="ColorRect" parent="WorldScenery"]
+offset_left = 2304.0
+offset_top = 186.0
+offset_right = 2326.0
+offset_bottom = 200.0
+color = Color(0.49, 0.31, 0.18, 1)
+
+[node name="OutpostWheelL" type="ColorRect" parent="WorldScenery"]
+offset_left = 2306.0
+offset_top = 198.0
+offset_right = 2312.0
+offset_bottom = 208.0
+color = Color(0.32, 0.2, 0.12, 1)
+
+[node name="OutpostWheelR" type="ColorRect" parent="WorldScenery"]
+offset_left = 2318.0
+offset_top = 198.0
+offset_right = 2324.0
+offset_bottom = 208.0
+color = Color(0.32, 0.2, 0.12, 1)
+
+[node name="OutpostLabel" type="Label" parent="WorldScenery"]
+offset_left = 2248.0
+offset_top = 140.0
+offset_right = 2368.0
+offset_bottom = 154.0
+theme_override_colors/font_color = Color(0.86, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "Đèo Nhị Trụ Tùng"
+horizontal_alignment = 1
+
+[node name="GroundLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAAAAAAACAAAAAAAAAAEAAAACAAAAAAAAAAIAAAACAAAAAAAAAAMAAAACAAAAAAAAAAQAAAACAAAAAAAAAAUAAAACAAAAAAAAAAYAAAACAAAAAAAAAAcAAAACAAAAAAAAAAgAAAACAAAAAAAAAAkAAAACAAAAAAAAAAoAAAACAAAAAAAAAAsAAAACAAAAAAAAAAwAAAACAAAAAAAAAA0AAAACAAAAAAAAAA4AAAACAAAAAAAAAA8AAAACAAAAAACVAAAAAAACAAAAAACVAAEAAAACAAAAAACVAAIAAAACAAAAAACVAAMAAAACAAAAAACVAAQAAAACAAAAAACVAAUAAAACAAAAAACVAAYAAAACAAAAAACVAAcAAAACAAAAAACVAAgAAAACAAAAAACVAAkAAAACAAAAAACVAAoAAAACAAAAAACVAAsAAAACAAAAAACVAAwAAAACAAAAAACVAA0AAAACAAAAAACVAA4AAAACAAAAAACVAA8AAAACAAAAAAABAA0AAAAAAAAAAAABAA4AAAABAAAAAAABAA8AAAABAAAAAAACAA0AAAAAAAAAAAACAA4AAAABAAAAAAACAA8AAAABAAAAAAADAA0AAAAAAAAAAAADAA4AAAABAAAAAAADAA8AAAABAAAAAAAEAA0AAAAAAAAAAAAEAA4AAAABAAAAAAAEAA8AAAABAAAAAAAFAA0AAAAAAAAAAAAFAA4AAAABAAAAAAAFAA8AAAABAAAAAAAGAA0AAAAAAAAAAAAGAA4AAAABAAAAAAAGAA8AAAABAAAAAAAHAA0AAAAAAAAAAAAHAA4AAAABAAAAAAAHAA8AAAABAAAAAAAIAA0AAAAAAAAAAAAIAA4AAAABAAAAAAAIAA8AAAABAAAAAAAJAA0AAAAAAAAAAAAJAA4AAAABAAAAAAAJAA8AAAABAAAAAAAKAA0AAAAAAAAAAAAKAA4AAAABAAAAAAAKAA8AAAABAAAAAAALAA0AAAAAAAAAAAALAA4AAAABAAAAAAALAA8AAAABAAAAAAAMAA0AAAAAAAAAAAAMAA4AAAABAAAAAAAMAA8AAAABAAAAAAANAA0AAAAAAAAAAAANAA4AAAABAAAAAAANAA8AAAABAAAAAAAOAA0AAAAAAAAAAAAOAA4AAAABAAAAAAAOAA8AAAABAAAAAAAPAA0AAAAAAAAAAAAPAA4AAAABAAAAAAAPAA8AAAABAAAAAAAQAA0AAAAAAAAAAAAQAA4AAAABAAAAAAAQAA8AAAABAAAAAAARAA0AAAAAAAAAAAARAA4AAAABAAAAAAARAA8AAAABAAAAAAASAA0AAAAAAAAAAAASAA4AAAABAAAAAAASAA8AAAABAAAAAAATAA0AAAAAAAAAAAATAA4AAAABAAAAAAATAA8AAAABAAAAAAAUAA0AAAAAAAAAAAAUAA4AAAABAAAAAAAUAA8AAAABAAAAAAAVAA0AAAAAAAAAAAAVAA4AAAABAAAAAAAVAA8AAAABAAAAAAAWAA0AAAAAAAAAAAAWAA4AAAABAAAAAAAWAA8AAAABAAAAAAAXAA0AAAAAAAAAAAAXAA4AAAABAAAAAAAXAA8AAAABAAAAAAAYAA0AAAAAAAAAAAAYAA4AAAABAAAAAAAYAA8AAAABAAAAAAAZAAwAAAAAAAAAAAAZAA0AAAABAAAAAAAZAA4AAAABAAAAAAAZAA8AAAABAAAAAAAaAAwAAAAAAAAAAAAaAA0AAAABAAAAAAAaAA4AAAABAAAAAAAaAA8AAAABAAAAAAAbAAwAAAAAAAAAAAAbAA0AAAABAAAAAAAbAA4AAAABAAAAAAAbAA8AAAABAAAAAAAcAAwAAAAAAAAAAAAcAA0AAAABAAAAAAAcAA4AAAABAAAAAAAcAA8AAAABAAAAAAAdAA0AAAAAAAAAAAAdAA4AAAABAAAAAAAdAA8AAAABAAAAAAAeAA0AAAAAAAAAAAAeAA4AAAABAAAAAAAeAA8AAAABAAAAAAAfAA0AAAAAAAAAAAAfAA4AAAABAAAAAAAfAA8AAAABAAAAAAAgAA0AAAAAAAAAAAAgAA4AAAABAAAAAAAgAA8AAAABAAAAAAAhAA0AAAAAAAAAAAAhAA4AAAABAAAAAAAhAA8AAAABAAAAAAAiAA0AAAAAAAAAAAAiAA4AAAABAAAAAAAiAA8AAAABAAAAAAAjAA0AAAAAAAAAAAAjAA4AAAABAAAAAAAjAA8AAAABAAAAAAAkAAsAAAACAAAAAAAkAAwAAAACAAAAAAAkAA0AAAACAAAAAAAkAA4AAAABAAAAAAAkAA8AAAABAAAAAAAlAAsAAAACAAAAAAAlAAwAAAACAAAAAAAlAA0AAAACAAAAAAAlAA4AAAABAAAAAAAlAA8AAAABAAAAAAAmAAsAAAACAAAAAAAmAAwAAAACAAAAAAAmAA0AAAACAAAAAAAmAA4AAAABAAAAAAAmAA8AAAABAAAAAAAnAAsAAAACAAAAAAAnAAwAAAACAAAAAAAnAA0AAAACAAAAAAAnAA4AAAABAAAAAAAnAA8AAAABAAAAAAAoAA0AAAAAAAAAAAAoAA4AAAABAAAAAAAoAA8AAAABAAAAAAApAA0AAAAAAAAAAAApAA4AAAABAAAAAAApAA8AAAABAAAAAAAqAA0AAAAAAAAAAAAqAA4AAAABAAAAAAAqAA8AAAABAAAAAAArAA0AAAAAAAAAAAArAA4AAAABAAAAAAArAA8AAAABAAAAAAAsAA0AAAAAAAAAAAAsAA4AAAABAAAAAAAsAA8AAAABAAAAAAAtAA0AAAAAAAAAAAAtAA4AAAABAAAAAAAtAA8AAAABAAAAAAAuAA0AAAAAAAAAAAAuAA4AAAABAAAAAAAuAA8AAAABAAAAAAAvAA0AAAAAAAAAAAAvAA4AAAABAAAAAAAvAA8AAAABAAAAAAAwAA0AAAAAAAAAAAAwAA4AAAABAAAAAAAwAA8AAAABAAAAAAAxAA0AAAAAAAAAAAAxAA4AAAABAAAAAAAxAA8AAAABAAAAAAAyAA0AAAAAAAAAAAAyAA4AAAABAAAAAAAyAA8AAAABAAAAAAAzAA0AAAAAAAAAAAAzAA4AAAABAAAAAAAzAA8AAAABAAAAAAA0AA0AAAAAAAAAAAA0AA4AAAABAAAAAAA0AA8AAAABAAAAAAA1AA0AAAAAAAAAAAA1AA4AAAABAAAAAAA1AA8AAAABAAAAAAA2AAwAAAAAAAAAAAA2AA0AAAABAAAAAAA2AA4AAAABAAAAAAA2AA8AAAABAAAAAAA3AAwAAAAAAAAAAAA3AA0AAAABAAAAAAA3AA4AAAABAAAAAAA3AA8AAAABAAAAAAA4AAwAAAAAAAAAAAA4AA0AAAABAAAAAAA4AA4AAAABAAAAAAA4AA8AAAABAAAAAAA5AAwAAAAAAAAAAAA5AA0AAAABAAAAAAA5AA4AAAABAAAAAAA5AA8AAAABAAAAAAA9AAwAAAACAAAAAAA9AA0AAAABAAAAAAA9AA4AAAABAAAAAAA9AA8AAAABAAAAAAA+AAwAAAACAAAAAAA+AA0AAAABAAAAAAA+AA4AAAABAAAAAAA+AA8AAAABAAAAAAA/AAwAAAACAAAAAAA/AA0AAAABAAAAAAA/AA4AAAABAAAAAAA/AA8AAAABAAAAAABAAAwAAAACAAAAAABAAA0AAAABAAAAAABAAA4AAAABAAAAAABAAA8AAAABAAAAAABBAAwAAAACAAAAAABBAA0AAAABAAAAAABBAA4AAAABAAAAAABBAA8AAAABAAAAAABFAAsAAAAAAAAAAABFAAwAAAABAAAAAABFAA0AAAABAAAAAABFAA4AAAABAAAAAABFAA8AAAABAAAAAABGAAsAAAAAAAAAAABGAAwAAAABAAAAAABGAA0AAAABAAAAAABGAA4AAAABAAAAAABGAA8AAAABAAAAAABHAAsAAAAAAAAAAABHAAwAAAABAAAAAABHAA0AAAABAAAAAABHAA4AAAABAAAAAABHAA8AAAABAAAAAABIAAsAAAAAAAAAAABIAAwAAAABAAAAAABIAA0AAAABAAAAAABIAA4AAAABAAAAAABIAA8AAAABAAAAAABJAAsAAAAAAAAAAABJAAwAAAABAAAAAABJAA0AAAABAAAAAABJAA4AAAABAAAAAABJAA8AAAABAAAAAABKAA0AAAAAAAAAAABKAA4AAAABAAAAAABKAA8AAAABAAAAAABLAA0AAAAAAAAAAABLAA4AAAABAAAAAABLAA8AAAABAAAAAABMAA0AAAAAAAAAAABMAA4AAAABAAAAAABMAA8AAAABAAAAAABNAA0AAAAAAAAAAABNAA4AAAABAAAAAABNAA8AAAABAAAAAABOAA0AAAAAAAAAAABOAA4AAAABAAAAAABOAA8AAAABAAAAAABPAA0AAAAAAAAAAABPAA4AAAABAAAAAABPAA8AAAABAAAAAABQAA0AAAAAAAAAAABQAA4AAAABAAAAAABQAA8AAAABAAAAAABRAA0AAAAAAAAAAABRAA4AAAABAAAAAABRAA8AAAABAAAAAABSAA0AAAAAAAAAAABSAA4AAAABAAAAAABSAA8AAAABAAAAAABTAAsAAAACAAAAAABTAAwAAAACAAAAAABTAA0AAAACAAAAAABTAA4AAAABAAAAAABTAA8AAAABAAAAAABUAAsAAAACAAAAAABUAAwAAAACAAAAAABUAA0AAAACAAAAAABUAA4AAAABAAAAAABUAA8AAAABAAAAAABVAAsAAAACAAAAAABVAAwAAAACAAAAAABVAA0AAAACAAAAAABVAA4AAAABAAAAAABVAA8AAAABAAAAAABWAA0AAAAAAAAAAABWAA4AAAABAAAAAABWAA8AAAABAAAAAABXAA0AAAAAAAAAAABXAA4AAAABAAAAAABXAA8AAAABAAAAAABYAA0AAAAAAAAAAABYAA4AAAABAAAAAABYAA8AAAABAAAAAABZAA0AAAAAAAAAAABZAA4AAAABAAAAAABZAA8AAAABAAAAAABaAA0AAAAAAAAAAABaAA4AAAABAAAAAABaAA8AAAABAAAAAABbAA0AAAAAAAAAAABbAA4AAAABAAAAAABbAA8AAAABAAAAAABcAA0AAAAAAAAAAABcAA4AAAABAAAAAABcAA8AAAABAAAAAABdAA0AAAAAAAAAAABdAA4AAAABAAAAAABdAA8AAAABAAAAAABeAA0AAAAAAAAAAABeAA4AAAABAAAAAABeAA8AAAABAAAAAABfAA0AAAAAAAAAAABfAA4AAAABAAAAAABfAA8AAAABAAAAAABgAA0AAAAAAAAAAABgAA4AAAABAAAAAABgAA8AAAABAAAAAABhAA0AAAAAAAAAAABhAA4AAAABAAAAAABhAA8AAAABAAAAAABiAA0AAAAAAAAAAABiAA4AAAABAAAAAABiAA8AAAABAAAAAABjAA0AAAAAAAAAAABjAA4AAAABAAAAAABjAA8AAAABAAAAAABkAA0AAAAAAAAAAABkAA4AAAABAAAAAABkAA8AAAABAAAAAABlAA0AAAAAAAAAAABlAA4AAAABAAAAAABlAA8AAAABAAAAAABmAA0AAAAAAAAAAABmAA4AAAABAAAAAABmAA8AAAABAAAAAABnAA0AAAAAAAAAAABnAA4AAAABAAAAAABnAA8AAAABAAAAAABoAA0AAAAAAAAAAABoAA4AAAABAAAAAABoAA8AAAABAAAAAABpAA0AAAAAAAAAAABpAA4AAAABAAAAAABpAA8AAAABAAAAAABqAA0AAAAAAAAAAABqAA4AAAABAAAAAABqAA8AAAABAAAAAABrAA0AAAAAAAAAAABrAA4AAAABAAAAAABrAA8AAAABAAAAAABsAA0AAAAAAAAAAABsAA4AAAABAAAAAABsAA8AAAABAAAAAABtAA0AAAAAAAAAAABtAA4AAAABAAAAAABtAA8AAAABAAAAAABuAA0AAAAAAAAAAABuAA4AAAABAAAAAABuAA8AAAABAAAAAABvAA0AAAAAAAAAAABvAA4AAAABAAAAAABvAA8AAAABAAAAAABwAA0AAAAAAAAAAABwAA4AAAABAAAAAABwAA8AAAABAAAAAABxAA0AAAAAAAAAAABxAA4AAAABAAAAAABxAA8AAAABAAAAAAByAA0AAAAAAAAAAAByAA4AAAABAAAAAAByAA8AAAABAAAAAABzAA0AAAAAAAAAAABzAA4AAAABAAAAAABzAA8AAAABAAAAAAB0AA0AAAAAAAAAAAB0AA4AAAABAAAAAAB0AA8AAAABAAAAAAB1AA0AAAAAAAAAAAB1AA4AAAABAAAAAAB1AA8AAAABAAAAAAB2AA0AAAAAAAAAAAB2AA4AAAABAAAAAAB2AA8AAAABAAAAAAB3AA0AAAAAAAAAAAB3AA4AAAABAAAAAAB3AA8AAAABAAAAAAB4AA0AAAAAAAAAAAB4AA4AAAABAAAAAAB4AA8AAAABAAAAAAB5AA0AAAAAAAAAAAB5AA4AAAABAAAAAAB5AA8AAAABAAAAAAB6AA0AAAAAAAAAAAB6AA4AAAABAAAAAAB6AA8AAAABAAAAAAB7AA0AAAAAAAAAAAB7AA4AAAABAAAAAAB7AA8AAAABAAAAAAB8AA0AAAAAAAAAAAB8AA4AAAABAAAAAAB8AA8AAAABAAAAAAB9AA0AAAAAAAAAAAB9AA4AAAABAAAAAAB9AA8AAAABAAAAAAB+AA0AAAAAAAAAAAB+AA4AAAABAAAAAAB+AA8AAAABAAAAAAB/AA0AAAAAAAAAAAB/AA4AAAABAAAAAAB/AA8AAAABAAAAAACAAA0AAAAAAAAAAACAAA4AAAABAAAAAACAAA8AAAABAAAAAACBAA0AAAAAAAAAAACBAA4AAAABAAAAAACBAA8AAAABAAAAAACCAA0AAAAAAAAAAACCAA4AAAABAAAAAACCAA8AAAABAAAAAACDAA0AAAAAAAAAAACDAA4AAAABAAAAAACDAA8AAAABAAAAAACEAA0AAAAAAAAAAACEAA4AAAABAAAAAACEAA8AAAABAAAAAACFAA0AAAAAAAAAAACFAA4AAAABAAAAAACFAA8AAAABAAAAAACGAA0AAAAAAAAAAACGAA4AAAABAAAAAACGAA8AAAABAAAAAACHAA0AAAAAAAAAAACHAA4AAAABAAAAAACHAA8AAAABAAAAAACIAA0AAAAAAAAAAACIAA4AAAABAAAAAACIAA8AAAABAAAAAACJAA0AAAAAAAAAAACJAA4AAAABAAAAAACJAA8AAAABAAAAAACKAA0AAAAAAAAAAACKAA4AAAABAAAAAACKAA8AAAABAAAAAACLAA0AAAAAAAAAAACLAA4AAAABAAAAAACLAA8AAAABAAAAAACMAA0AAAAAAAAAAACMAA4AAAABAAAAAACMAA8AAAABAAAAAACNAA0AAAAAAAAAAACNAA4AAAABAAAAAACNAA8AAAABAAAAAACOAA0AAAAAAAAAAACOAA4AAAABAAAAAACOAA8AAAABAAAAAACPAA0AAAAAAAAAAACPAA4AAAABAAAAAACPAA8AAAABAAAAAACQAA0AAAAAAAAAAACQAA4AAAABAAAAAACQAA8AAAABAAAAAACRAA0AAAAAAAAAAACRAA4AAAABAAAAAACRAA8AAAABAAAAAACSAA0AAAAAAAAAAACSAA4AAAABAAAAAACSAA8AAAABAAAAAACTAA0AAAAAAAAAAACTAA4AAAABAAAAAACTAA8AAAABAAAAAACUAA0AAAAAAAAAAACUAA4AAAABAAAAAACUAA8AAAABAAAAAAAOAAUAAAAAAAAAAAAOAAYAAAACAAAAAAAPAAUAAAAAAAAAAAAPAAYAAAACAAAAAAAQAAUAAAAAAAAAAAAQAAYAAAACAAAAAAARAAUAAAAAAAAAAAARAAYAAAACAAAAAAASAAUAAAAAAAAAAAASAAYAAAACAAAAAAATAAUAAAAAAAAAAAATAAYAAAACAAAAAABaAAgAAAAAAAAAAABaAAkAAAACAAAAAABbAAgAAAAAAAAAAABbAAkAAAACAAAAAABcAAgAAAAAAAAAAABcAAkAAAACAAAAAABdAAgAAAAAAAAAAABdAAkAAAACAAAAAABeAAgAAAAAAAAAAABeAAkAAAACAAAAAABfAAgAAAAAAAAAAABfAAkAAAACAAAAAABgAAgAAAAAAAAAAABgAAkAAAACAAAAAABhAAgAAAAAAAAAAABhAAkAAAACAAAAAABiAAgAAAAAAAAAAABiAAkAAAACAAAAAABaAAoAAAACAAAAAABaAAsAAAACAAAAAABaAAwAAAACAAAAAABbAAoAAAACAAAAAABbAAsAAAACAAAAAABbAAwAAAACAAAAAAA=")
+tile_set = ExtResource("2_tiles")
+
+[node name="OneWayPlatformLayer" type="TileMapLayer" parent="." groups=["one_way_platforms"]]
+tile_map_data = PackedByteArray("AAAgAAgAAAADAAAAAAAhAAgAAAADAAAAAAAiAAgAAAADAAAAAAAjAAgAAAADAAAAAAAZAAYAAAADAAAAAAAaAAYAAAADAAAAAAAbAAYAAAADAAAAAAAcAAYAAAADAAAAAABWAAkAAAADAAAAAABXAAkAAAADAAAAAABYAAkAAAADAAAAAABZAAkAAAADAAAAAAB3AAoAAAADAAAAAAB4AAoAAAADAAAAAAB5AAoAAAADAAAAAAB6AAoAAAADAAAAAAB/AAoAAAADAAAAAACAAAoAAAADAAAAAACBAAoAAAADAAAAAACCAAoAAAADAAAAAAA=")
+tile_set = ExtResource("2_tiles")
+
+[node name="RiverHazard_West" parent="." instance=ExtResource("7_river")]
+position = Vector2(952, 228)
+
+[node name="RiverHazard_East" parent="." instance=ExtResource("7_river")]
+position = Vector2(1080, 228)
+
+[node name="SpawnDefault" type="Marker2D" parent="."]
+position = Vector2(80, 208)
+script = ExtResource("4_spawn")
+spawn_id = &"default"
+facing_dir = 1
+
+[node name="SpawnFromHub" type="Marker2D" parent="."]
+position = Vector2(80, 208)
+script = ExtResource("4_spawn")
+spawn_id = &"from_hub"
+facing_dir = 1
+
+[node name="SpawnXaPhu" type="Marker2D" parent="."]
+position = Vector2(120, 208)
+script = ExtResource("4_spawn")
+spawn_id = &"xa_phu"
+facing_dir = 1
+
+[node name="SpawnEastOutpost" type="Marker2D" parent="."]
+position = Vector2(2264, 208)
+script = ExtResource("4_spawn")
+spawn_id = &"east_outpost"
+facing_dir = -1
+
+[node name="ReturnToHubPortal" parent="." instance=ExtResource("5_portal")]
+position = Vector2(48, 208)
+target_stage_id = "hub_loc_tri"
+target_spawn_id = &"east_gate"
+portal_prompt = "[E] Về Làng Lộc Trĩ"
+
+[node name="LanternTrailhead" parent="." instance=ExtResource("6_lantern")]
+position = Vector2(148, 208)
+
+[node name="LanternArena" parent="." instance=ExtResource("6_lantern")]
+position = Vector2(1840, 208)
+
+[node name="LanternOutpost" parent="." instance=ExtResource("6_lantern")]
+position = Vector2(2224, 208)
+
+[node name="SecretChest_Canopy" parent="." instance=ExtResource("8_chest")]
+position = Vector2(272, 80)
+chest_id = "stage_01_chest_canopy"
+gold_reward = 40
+item_reward_id = &"mat_hard_wood"
+item_reward_count = 2
+
+[node name="SecretChest_Cavern" parent="." instance=ExtResource("8_chest")]
+position = Vector2(1504, 208)
+chest_id = "stage_01_chest_cavern"
+gold_reward = 55
+item_reward_id = &"mat_iron_ore"
+item_reward_count = 2
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="WildSquirrel_01" parent="Enemies" instance=ExtResource("9_squirrel")]
+position = Vector2(288, 208)
+
+[node name="GreenViper_01" parent="Enemies" instance=ExtResource("10_viper")]
+position = Vector2(512, 208)
+
+[node name="WildSquirrel_02" parent="Enemies" instance=ExtResource("9_squirrel")]
+position = Vector2(736, 208)
+
+[node name="GreenViper_02" parent="Enemies" instance=ExtResource("10_viper")]
+position = Vector2(1264, 208)
+
+[node name="WildSquirrel_03" parent="Enemies" instance=ExtResource("9_squirrel")]
+position = Vector2(1512, 128)
+
+[node name="ThornBeetle_01" parent="Enemies" instance=ExtResource("11_beetle")]
+position = Vector2(1632, 208)
+
+[node name="GatekeeperGroup" type="Node2D" parent="."]
+
+[node name="GateViper" parent="GatekeeperGroup" instance=ExtResource("10_viper")]
+position = Vector2(1912, 208)
+
+[node name="GateBeetle" parent="GatekeeperGroup" instance=ExtResource("11_beetle")]
+position = Vector2(1984, 208)
+
+[node name="GateSquirrel" parent="GatekeeperGroup" instance=ExtResource("9_squirrel")]
+position = Vector2(2048, 208)
+
+[node name="GateBarrier" type="StaticBody2D" parent="."]
+position = Vector2(2168, 208)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GateBarrier"]
+position = Vector2(0, -40)
+shape = SubResource("RectangleShape2D_gate_barrier")
+
+[node name="SealPillar" type="ColorRect" parent="GateBarrier"]
+offset_left = -8.0
+offset_top = -80.0
+offset_right = 8.0
+color = Color(0.28, 0.2, 0.34, 1)
+
+[node name="SealGlow" type="ColorRect" parent="GateBarrier"]
+offset_left = -3.0
+offset_top = -72.0
+offset_right = 3.0
+offset_bottom = -8.0
+color = Color(0.76, 0.28, 0.88, 0.85)
+
+[node name="OutpostXaPhu" parent="." instance=ExtResource("12_npc")]
+position = Vector2(2296, 208)
+npc_name = "Anh Xa Phu"
+dialogue_id = "xa_phu"
+role = 3
+sprite_texture = ExtResource("13_tex_xa_phu")
+default_facing = -1
+prompt_label_text = "[E] Anh Xa Phu"
+target_ui_path = NodePath("../TravelUI")
+
+[node name="NhiTruTungGate" type="Node2D" parent="."]
+position = Vector2(2352, 208)
+
+[node name="ArchPillarL" type="ColorRect" parent="NhiTruTungGate"]
+offset_left = -14.0
+offset_top = -38.0
+offset_right = -6.0
+color = Color(0.42, 0.44, 0.48, 1)
+
+[node name="ArchPillarR" type="ColorRect" parent="NhiTruTungGate"]
+offset_left = 6.0
+offset_top = -38.0
+offset_right = 14.0
+color = Color(0.42, 0.44, 0.48, 1)
+
+[node name="ArchLintel" type="ColorRect" parent="NhiTruTungGate"]
+offset_left = -18.0
+offset_top = -46.0
+offset_right = 18.0
+offset_bottom = -38.0
+color = Color(0.52, 0.54, 0.58, 1)
+
+[node name="InteractableArea" type="Area2D" parent="NhiTruTungGate"]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("14_interact")
+prompt_text = "[E] Đường Lên Nhị Trụ Tùng"
+prompt_offset = Vector2(0, -54)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NhiTruTungGate/InteractableArea"]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_nhi_tru_gate")
+
+[node name="Player" parent="." instance=ExtResource("15_player")]
+position = Vector2(80, 208)
+
+[node name="Camera2D" parent="Player" index="2"]
+limit_left = 0
+limit_top = -32
+limit_right = 2400
+limit_bottom = 240
+
+[node name="CollisionShape2D" parent="Player/HitboxComponent" index="0"]
+shape = SubResource("RectangleShape2D_stage01_atk")
+
+[node name="HUD" parent="." instance=ExtResource("16_hud")]
+
+[node name="TravelUI" parent="." instance=ExtResource("17_travel_ui")]
+
+[node name="DialogueBox" parent="." instance=ExtResource("18_dialogue")]
+
+[editable path="Player"]

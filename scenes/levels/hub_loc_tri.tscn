@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4]
+[gd_scene load_steps=21 format=4 uid="uid://b4h8h5ddhx3np"]
 
 [ext_resource type="Script" path="res://scripts/levels/hub_loc_tri.gd" id="1_hub"]
 [ext_resource type="TileSet" uid="uid://drjwlkibapwe8" path="res://assets/sprites/tilesets/sandbox_tileset.tres" id="2_tiles"]
@@ -12,10 +12,9 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="10_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/StashUI.tscn" id="11_stash"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/VillageNpc.tscn" id="12_npc"]
-[ext_resource type="Texture2D" path="res://assets/sprites/npcs/npc_tho_ren.png" id="13_tex_tho_ren"]
-[ext_resource type="Texture2D" path="res://assets/sprites/npcs/npc_tap_hoa.png" id="14_tex_tap_hoa"]
-[ext_resource type="Texture2D" path="res://assets/sprites/npcs/npc_xa_phu.png" id="15_tex_xa_phu"]
-[ext_resource type="Texture2D" path="res://assets/sprites/npcs/npc_ly_thong.png" id="16_tex_ly_thong"]
+[ext_resource type="Texture2D" uid="uid://edrtwhd3i5dr" path="res://assets/sprites/npcs/npc_tho_ren.png" id="13_tex_tho_ren"]
+[ext_resource type="Texture2D" uid="uid://ddrab33yqngw0" path="res://assets/sprites/npcs/npc_tap_hoa.png" id="14_tex_tap_hoa"]
+[ext_resource type="Texture2D" uid="uid://cb8uw2oi5ba1" path="res://assets/sprites/npcs/npc_xa_phu.png" id="15_tex_xa_phu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ForgeUI.tscn" id="17_forge_ui"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ShopUI.tscn" id="18_shop_ui"]
 [ext_resource type="PackedScene" path="res://scenes/ui/TravelUI.tscn" id="19_travel_ui"]
@@ -255,14 +254,11 @@ tile_set = ExtResource("2_tiles")
 [node name="SpawnDefault" type="Marker2D" parent="."]
 position = Vector2(132, 208)
 script = ExtResource("4_spawn")
-spawn_id = &"default"
-facing_dir = 1
 
 [node name="SpawnCottageBed" type="Marker2D" parent="."]
 position = Vector2(92, 208)
 script = ExtResource("4_spawn")
 spawn_id = &"cottage_bed"
-facing_dir = 1
 
 [node name="SpawnEastGate" type="Marker2D" parent="."]
 position = Vector2(848, 208)
@@ -300,9 +296,9 @@ position = Vector2(832, 208)
 
 [node name="EastGatePortal" parent="." instance=ExtResource("8_portal")]
 position = Vector2(888, 208)
-target_stage_id = "test_sandbox"
+target_stage_id = "stage_01"
 target_spawn_id = &"from_hub"
-portal_prompt = "[E] Ra Bìa Rừng (Sandbox)"
+portal_prompt = "[E] Ra Rừng Ven Làng"
 
 [node name="NpcThoRen" parent="." instance=ExtResource("12_npc")]
 position = Vector2(358, 208)
@@ -310,7 +306,6 @@ npc_name = "Anh Thợ Rèn"
 dialogue_id = "tho_ren"
 role = 1
 sprite_texture = ExtResource("13_tex_tho_ren")
-default_facing = 1
 prompt_label_text = "[E] Anh Thợ Rèn"
 target_ui_path = NodePath("../ForgeUI")
 
@@ -320,16 +315,12 @@ npc_name = "Cô Bé Tạp Hóa"
 dialogue_id = "tap_hoa"
 role = 2
 sprite_texture = ExtResource("14_tex_tap_hoa")
-default_facing = 1
 prompt_label_text = "[E] Cô Bé Tạp Hóa"
 target_ui_path = NodePath("../ShopUI")
 
 [node name="NpcLyThong" parent="." instance=ExtResource("12_npc")]
 position = Vector2(640, 208)
 npc_name = "Lý Thông"
-dialogue_id = "ly_thong"
-role = 0
-sprite_texture = ExtResource("16_tex_ly_thong")
 default_facing = -1
 prompt_label_text = "[E] Lý Thông"
 quest_flag_to_hide_marker = "met_ly_thong"
@@ -369,4 +360,3 @@ shape = SubResource("RectangleShape2D_hub_atk")
 [node name="DialogueBox" parent="." instance=ExtResource("20_dialogue")]
 
 [editable path="Player"]
-

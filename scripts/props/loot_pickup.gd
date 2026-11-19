@@ -139,8 +139,10 @@ func _try_collect(body: Node2D) -> void:
 	_collected_or_lost = true
 	if kind == PickupKind.GOLD:
 		GameState.add_gold(amount)
+		AudioManager.play_sfx(&"pickup_gold", 0.97, 1.08)
 	elif item_id != &"":
 		GameState.add_material(item_id, amount)
+		AudioManager.play_sfx(&"pickup_item", 0.96, 1.05)
 		var item_data: ItemData = GameState.get_item_data(item_id)
 		var label_name: String = item_data.display_name if item_data != null else String(item_id)
 		EventBus.notification_requested.emit("Nhặt +%d %s." % [amount, label_name])
@@ -152,5 +154,7 @@ func _lose_to_hazard() -> void:
 	if _collected_or_lost:
 		return
 	_collected_or_lost = true
+	if _hazard_detector != null and not _hazard_detector.get_overlapping_areas().is_empty():
+		AudioManager.play_sfx(&"water_splash", 1.25, 1.35, -8.0)
 	queue_free()
 

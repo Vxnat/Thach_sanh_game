@@ -488,6 +488,7 @@ func prepare_ground_attack_step(step_index: int) -> StringName:
 
 	if animation_player != null:
 		animation_player.speed_scale = speed_scale
+	play_weapon_swing_sfx(step_index)
 	return anim_name
 
 
@@ -526,7 +527,20 @@ func prepare_air_attack(is_down_attack: bool, air_step: int = 0) -> StringName:
 
 	if animation_player != null:
 		animation_player.speed_scale = speed_scale
+	play_weapon_swing_sfx(air_step)
 	return anim_name
+
+
+func play_weapon_swing_sfx(step_index: int = 0) -> void:
+	var group: WeaponAnimProfile.WeaponGroup = WeaponAnimProfile.WeaponGroup.HAMMER
+	if equipped_weapon != null and equipped_weapon.animation_profile != null:
+		group = equipped_weapon.animation_profile.weapon_group
+	if group == WeaponAnimProfile.WeaponGroup.HAMMER or group == WeaponAnimProfile.WeaponGroup.AXE:
+		var base_pitch: float = 0.94 + float(step_index) * 0.04
+		AudioManager.play_sfx(&"swing_heavy", base_pitch, base_pitch + 0.06)
+	else:
+		var base_pitch: float = 0.96 + float(step_index) * 0.05
+		AudioManager.play_sfx(&"swing_light", base_pitch, base_pitch + 0.07)
 
 
 func _apply_hitbox_for_step(step_index: int) -> void:
@@ -689,6 +703,7 @@ func reset_combat_state() -> void:
 
 func _on_hitbox_hit_landed(hurtbox: HurtboxComponent, damage_dealt: int) -> void:
 	restore_mp(mp_gain_per_hit)
+	AudioManager.play_sfx(&"hit_enemy", 0.94, 1.06)
 	var impact_pos: Vector2 = (
 		hurtbox.get_hurtbox_center()
 		if hurtbox != null
@@ -714,6 +729,7 @@ func _on_player_damaged(_amount: int, knockback: Vector2, _source: Node2D) -> vo
 		trigger_camera_shake(Vector2(0.0, 1.0), 3.0, 0.14)
 		return
 
+	AudioManager.play_sfx(&"player_hurt", 0.96, 1.04)
 	spawn_hit_spark(global_position + Vector2(0.0, -14.0))
 	trigger_camera_shake(Vector2(0.0, 1.0), 2.5, 0.12)
 	if state_machine != null:
@@ -753,6 +769,7 @@ func _execute_hazard_resolution(hazard: HazardZone) -> void:
 
 	var ratio: float = hazard.max_hp_damage_ratio if is_instance_valid(hazard) else 0.80
 	var hazard_dmg: int = int(ceil(float(health_component.max_hp) * ratio))
+	AudioManager.play_sfx(&"water_splash", 0.95, 1.05)
 	var actual_dmg: int = health_component.take_damage(hazard_dmg, Vector2.ZERO, hazard, true)
 
 	if health_component.current_hp <= 0 or health_component.is_dead:
@@ -940,18 +957,21 @@ func _handle_quick_consumables() -> void:
 			if heal_amt > 0:
 				health_component.heal(heal_amt)
 				_flash_tint(Color(1.2, 1.05, 0.45, 1.0))
+				AudioManager.play_sfx(&"pickup_item", 1.02, 1.08)
 	elif Input.is_action_just_pressed("belt_hp"):
 		if health_component.current_hp < health_component.max_hp:
 			var heal_amt: int = GameState.consume_belt_hp()
 			if heal_amt > 0:
 				health_component.heal(heal_amt)
 				_flash_tint(Color(0.55, 1.2, 0.55, 1.0))
+				AudioManager.play_sfx(&"pickup_item", 1.02, 1.08)
 	elif Input.is_action_just_pressed("belt_mp"):
 		if current_mp < max_mp:
 			var mp_amt: int = GameState.consume_belt_mp()
 			if mp_amt > 0:
 				restore_mp(mp_amt)
 				_flash_tint(Color(0.55, 0.85, 1.25, 1.0))
+				AudioManager.play_sfx(&"pickup_item", 1.02, 1.08)
 
 
 func _on_health_component_hp_changed(new_hp: int, new_max_hp: int) -> void:

@@ -20,6 +20,19 @@
 					}
 				},
 				{
+					"id": "ly_thong_stage_01_cleared",
+					"require_flags": {
+						"met_ly_thong": true,
+						"stage_01_cleared": true
+					},
+					"greeting": "Đệ phá tan bầy yêu tinh gác cuối Rừng Ven Làng rồi sao? Thật đáng nể!",
+					"lines": [
+						"Nghe tin đệ mở thông đường lên Đèo Nhị Trụ Tùng mà ta nhẹ cả người.",
+						"Phía trước chắc chắn còn nhiều hiểm họa hơn nữa — đệ nhớ mang quặng sắt, gỗ lim về nhờ Anh Thợ Rèn nâng cấp binh khí trước khi lên gặp Tiên Ông nhé."
+					],
+					"set_flags": {}
+				},
+				{
 					"id": "ly_thong_after_met",
 					"require_flags": {
 						"met_ly_thong": true
@@ -126,6 +139,18 @@
 			"speaker_name": "Anh Xa Phu",
 			"branches": [
 				{
+					"id": "xa_phu_stage_01_cleared",
+					"require_flags": {
+						"stage_01_cleared": true
+					},
+					"greeting": "Tuyến xe từ Làng tới Đầu Rừng lẫn Trạm Đèo Nhị Trụ đã thông suốt cả rồi!",
+					"lines": [
+						"Cậu dẹp sạch bầy quái gác cổng cuối rừng nên ngựa của ta giờ chạy thẳng lên tận chân đèo Nhị Trụ Tùng luôn.",
+						"Muốn ghé Đầu Rừng săn đồ hay lên thẳng Trạm Đèo Nhị Trụ, cứ chọn tuyến trên bản đồ nhé!"
+					],
+					"set_flags": {}
+				},
+				{
 					"id": "xa_phu_night",
 					"require_night": true,
 					"require_flags": {},
@@ -141,10 +166,10 @@
 					"require_flags": {
 						"met_ly_thong": true
 					},
-					"greeting": "Chuyến xe tới Nhị Trụ Tùng chuẩn bị khởi hành — anh lên xe chứ?",
+					"greeting": "Đường vào Rừng Ven Làng đã mở — cậu muốn đánh xe tới đâu?",
 					"lines": [
-						"Hiện ta chạy khứ hồi giữa Làng Lộc Trĩ và khu Bìa Rừng Tập Luyện để cậu làm quen đường.",
-						"Con đường chính dẫn vào Màn 1 – Rừng Ven Làng sẽ thông xe ngay ở giai đoạn kế tiếp!"
+						"Ta có thể chở cậu giữa Làng Lộc Trĩ, Bìa Rừng Tập Luyện và Đầu Rừng Ven Làng bất cứ lúc nào.",
+						"Khi nào cậu dẹp xong nhóm quái gác cổng cuối Rừng Ven Làng, ta sẽ mở thêm trạm dừng ngay dưới chân Đèo Nhị Trụ Tùng!"
 					],
 					"set_flags": {}
 				},
@@ -157,6 +182,23 @@
 						"Nếu chẳng may hết máu ngoài rừng, cứ yên tâm — dân làng sẽ đưa cậu tỉnh dậy ở Nhà Tranh!"
 					],
 					"set_flags": {}
+				}
+			]
+		},
+		"nhi_tru_tung_gate": {
+			"speaker_name": "Cổng Đá Nhị Trụ Tùng",
+			"branches": [
+				{
+					"id": "nhi_tru_tung_gate_default",
+					"require_flags": {},
+					"greeting": "Bậc đá cổ phủ rêu dẫn lên đỉnh Nhị Trụ Tùng đã thông thoáng.",
+					"lines": [
+						"Phong ấn tà khí cuối Rừng Ven Làng đã bị phá tan — phía trước chính là con đường lên Nhị Trụ Tùng tìm Tiên Ông.",
+						"Chúc mừng! Bạn đã chinh phục xong Màn 1 (Rừng Ven Làng). Phần đường lên Nhị Trụ Tùng (Màn 2) sẽ tiếp tục mở ra ở Giai đoạn 4!"
+					],
+					"set_flags": {
+						"inspected_nhi_tru_tung_gate": true
+					}
 				}
 			]
 		}

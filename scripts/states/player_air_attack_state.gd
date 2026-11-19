@@ -168,6 +168,7 @@ func _start_slam_land_recovery(combo: WeaponComboProfile) -> void:
 		land_anim = ap.air_slam_land_anim
 
 	player.trigger_camera_shake(Vector2(0.0, 1.0), 3.0 if is_hammer else 2.5, 0.14)
+	AudioManager.play_sfx(&"slam_impact", 0.95, 1.03)
 	if land_anim != &"" and player.animation_player != null and player.animation_player.has_animation(land_anim):
 		player.animation_player.stop(true)
 		player.animation_player.play(land_anim)

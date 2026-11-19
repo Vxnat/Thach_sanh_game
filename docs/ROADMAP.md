@@ -109,12 +109,14 @@ Không khởi tạo ồ ạt toàn bộ 5 `Autoload` và các hệ thống phứ
 - [x] Dựng `SecretChest` mở **1 lần duy nhất** (lưu `opened_chests` qua `GameState` / `SaveManager`).
   - *Kiểm chứng:* Bộ test Godot 4.3 headless (`ALL_STEP_3_1_TESTS_PASSED`) vượt qua 6/6 kịch bản: `StatsComponent` buff ban đêm (`12/15/17` -> `14/18/20` ATK, tốc độ `1.20x`, Vàng `1.35x`), `LootPickup` tắt nam châm hút (nằm yên trên đất tới khi `Player` chạm vào mới nhặt), `LootPickup` rơi xuống `RiverHazard` chìm mất vĩnh viễn, hạ `GreenViper` lên Level `2` và rớt Vàng vật lý trên đất, `WildSquirrel` nhảy vồ + `ThornBeetle` `SHELL_GUARD` giảm 50% sát thương `Đoản Đao` nhưng bị `Búa Gỗ` (`HAMMER`) phá giáp 100%, và `SandboxSecretChest` mở 1 lần lưu bền vững qua `SaveManager` + tải lại cảnh.
 
-### Bước 3.2: Thiết kế Màn 1 (`stage_01_rung_ven_lang.tscn`) & Kết nối Xa Phu
-- [ ] Thiết kế `stage_01_rung_ven_lang.tscn` (Graybox `16x16` chuẩn `camera.limit_bottom` chia hết cho `16`): đường chính + 1–2 ngách bí mật giấu rương vàng/khoáng thạch + đoạn nhảy qua suối sâu (luật `80%` Max HP).
-- [ ] Bố trí nhóm quái gác cổng cuối màn để mở đường tới **Nhị Trụ Tùng (Tiên Ông)** và mở tuyến dịch chuyển ở **Anh Xa Phu**.
+### Bước 3.2: Thiết kế Màn 1 (`stage_01_rung_ven_lang.tscn`) & Kết nối Xa Phu *(Đã hoàn thành)*
+- [x] Thiết kế `stage_01_rung_ven_lang.tscn` (Graybox `16x16` chuẩn `camera.limit_bottom` chia hết cho `16`): đường chính + 2 ngách bí mật giấu rương vàng/khoáng thạch (`SecretChest_Canopy` & `SecretChest_Cavern`) + đoạn nhảy qua 2 nhịp suối sâu (`RiverHazard_West`/`RiverHazard_East`, luật `80%` Max HP) có cồn đá `SafeAnchor` ở giữa.
+- [x] Bố trí nhóm quái gác cổng cuối màn (`GatekeeperGroup`) để mở `GateBarrier`, mở đường tới **Nhị Trụ Tùng (Tiên Ông)** và mở tuyến dịch chuyển ở **Anh Xa Phu** (`TravelUI` thêm `BtnTravel_stage_02` trỏ tới trạm cuối Đèo Nhị Trụ).
+  - *Kiểm chứng:* Bộ test Godot 4.3 headless (`ALL_STEP_3_2_AND_3_3_TESTS_PASSED`) xác minh luồng `EastGatePortal` từ Làng Lộc Trĩ sang `SpawnFromHub` (`80, 208`), `Camera2D` (`limit_bottom = 240`), cồn đá giữa suối cập nhật `SafeAnchor` (`1016, 192`) và rơi `RiverHazard_East` trừ `80%` Max HP (`100 -> 20`) không lặp, mở đủ 2 rương bí mật (nhặt Vàng + `mat_hard_wood` + `mat_iron_ore`), hạ `GatekeeperGroup` mở `GateBarrier`/`OutpostXaPhu`/`NhiTruTungGate`, lưu/tải qua `SaveManager` không chứa `res://` và dịch chuyển nhanh về `SpawnEastOutpost` (`2264, 208`).
 
-### Bước 3.3: Âm thanh nền tảng (BGM & SFX chiến đấu/môi trường)
-- [ ] Ghép nhạc nền & SFX cơ bản qua 3 bus `BGM` / `SFX` / `Ambience` (vung vũ khí, trúng đòn, nhảy, nhặt vàng, suối chảy).
+### Bước 3.3: Âm thanh nền tảng (BGM & SFX chiến đấu/môi trường) *(Đã hoàn thành)*
+- [x] Ghép nhạc nền & SFX cơ bản qua 3 bus `BGM` / `SFX` / `Ambience` (`AudioManager` Autoload, 16 file `.wav` `22050 Hz` PCM `CC0-1.0` trong `assets/audio/`, tự chuyển `amb_forest_day` ↔ `amb_night_crickets`, `StreamAudio` 2D trên `RiverHazard` và đầy đủ SFX vung vũ khí nặng/nhẹ, trúng đòn, phá giáp/dậm đất, nhảy, dash, bị thương, rơi suối, mở rương, nhặt vàng/nguyên liệu).
+  - *Kiểm chứng:* Bộ test Godot 4.3 headless (`ALL_STEP_3_2_AND_3_3_TESTS_PASSED`) kiểm tra đủ 4 bus (`Master`, `BGM`, `SFX`, `Ambience`), 16 stream nạp chuẩn + `LOOP_FORWARD`, đổi nhạc nền Hub ↔ Màn 1, đổi môi trường Ngày ↔ Đêm, `StreamAudio` phát trên bus `Ambience`, và xác nhận phát trọn đủ bộ SFX hành động/chiến đấu/nhặt đồ.
 
 ### Bước 3.4: Art Pass đồng bộ (Tileset Public chuẩn license + Pixel Art `1:1` cho Thạch Sanh, Làng & Quái Màn 1)
 - [ ] Sưu tầm/kiểm duyệt license (ghi vào `assets/CREDITS_AND_LICENSES.md`) cho Asset Public (`16x16` tileset rừng, VFX, UI) + Áp dụng pipeline AI & tách nền sạch (Alpha nhị phân, Import `Lossless`, căn Baseline) cùng bảng màu thống nhất cho Thạch Sanh 2 lớp (`BodyBase` + `FrontArm`, chốt thêm frame `RelicCast`), NPC Làng Lộc Trĩ, vũ khí rời và Quái Màn 1.
