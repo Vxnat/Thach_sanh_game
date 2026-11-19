@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeaponComboProfile" load_steps=2 format=3 uid="uid://dgcsd1tuxyljk"]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_combo_profile.gd" id="1_eknot"]
+
+[resource]
+script = ExtResource("1_eknot")
+max_steps = 3
+step_damage_multipliers = PackedFloat32Array(1, 1.1, 1.3)
+combo_window_sec = 0.25
+input_buffer_sec = 0.12
+cancel_to_dash_after_sec = 0.03
+has_air_slam = false
+air_slam_speed = 340.0
+air_stall_gravity_scale = 0.2
+pogo_bounce_velocity = -265.0

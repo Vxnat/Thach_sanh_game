@@ -1,0 +1,124 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/stash_ui.gd" id="1_stash"]
+[ext_resource type="Theme" path="res://assets/ui/pixel_ui_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stash"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+bg_color = Color(0.11, 0.09, 0.13, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.75, 0.6, 0.34, 1)
+
+[node name="StashUI" type="CanvasLayer"]
+layer = 20
+visible = false
+script = ExtResource("1_stash")
+
+[node name="RootControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+
+[node name="Backdrop" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="CenterPanel" type="PanelContainer" parent="RootControl"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 38.0
+offset_right = 344.0
+offset_bottom = 198.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_stash")
+
+[node name="VBox" type="VBoxContainer" parent="RootControl/CenterPanel"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TitleLabel" type="Label" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.87, 0.48, 1)
+theme_override_font_sizes/font_size = 9
+text = "RƯƠNG NHÀ TRANH (An Toàn Khi Bị Đánh Bại)"
+horizontal_alignment = 1
+
+[node name="GoldInfoLabel" type="Label" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 8
+text = "Túi mang theo: 100 Vàng | Trong Rương: 0 Vàng"
+horizontal_alignment = 1
+
+[node name="GoldButtons" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 6
+
+[node name="BtnDeposit25" type="Button" parent="RootControl/CenterPanel/VBox/GoldButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Cất 25"
+
+[node name="BtnDepositAll" type="Button" parent="RootControl/CenterPanel/VBox/GoldButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Cất Hết"
+
+[node name="BtnWithdraw25" type="Button" parent="RootControl/CenterPanel/VBox/GoldButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Rút 25"
+
+[node name="BtnWithdrawAll" type="Button" parent="RootControl/CenterPanel/VBox/GoldButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Rút Hết"
+
+[node name="PotionInfoLabel" type="Label" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.94, 0.86, 1)
+theme_override_font_sizes/font_size = 8
+text = "Đai Lưng: Đỏ 2/3, Thảo 1/2 | Rương: Đỏ 0, Thảo 0"
+horizontal_alignment = 1
+
+[node name="PotionButtons" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 6
+
+[node name="BtnRefillBelt" type="Button" parent="RootControl/CenterPanel/VBox/PotionButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Nạp Đầy Đai Lưng"
+
+[node name="BtnStoreHp" type="Button" parent="RootControl/CenterPanel/VBox/PotionButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Cất 1 Đỏ"
+
+[node name="BtnStoreMp" type="Button" parent="RootControl/CenterPanel/VBox/PotionButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Cất 1 Thảo"
+
+[node name="BtnClose" type="Button" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 8
+text = "Đóng [Esc]"
+

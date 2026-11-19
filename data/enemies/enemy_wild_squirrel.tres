@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/enemy_data.gd" id="1_edata"]
+
+[resource]
+script = ExtResource("1_edata")
+id = &"enemy_wild_squirrel"
+display_name = "Sóc Dại"
+max_hp = 32
+base_atk = 12
+move_speed = 68.0
+aggro_range = 115.0
+attack_range = 64.0
+patrol_distance = 36.0
+knockback_resistance = 0.0
+exp_reward = 14
+gold_min = 5
+gold_max = 8
+drop_item_id = &"mat_hard_wood"
+drop_chance_day = 0.4
+drop_chance_night = 0.65
+

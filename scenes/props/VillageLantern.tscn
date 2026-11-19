@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/village_lantern.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tilesets/village_lantern_post.png" id="2_post"]
+[ext_resource type="Texture2D" path="res://assets/sprites/vfx/lantern_glow_64.png" id="3_glow"]
+
+[node name="VillageLantern" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="PostSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_post")
+centered = false
+offset = Vector2(-8, -32)
+
+[node name="FlameCore" type="ColorRect" parent="."]
+visible = false
+offset_left = 3.0
+offset_top = -22.0
+offset_right = 6.0
+offset_bottom = -19.0
+color = Color(1, 0.878431, 0.509804, 1)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(4, -20)
+enabled = false
+color = Color(1, 0.729412, 0.411765, 1)
+energy = 1.15
+texture = ExtResource("3_glow")
+

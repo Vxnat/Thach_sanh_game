@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SlashVfxProfile" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/slash_vfx_profile.gd" id="1_qopvp"]
+[ext_resource type="Texture2D" path="res://assets/sprites/vfx/slash_vfx_sheet.png" id="2_mcx8p"]
+
+[resource]
+script = ExtResource("1_qopvp")
+vfx_texture = ExtResource("2_mcx8p")
+hframes = 3
+vframes = 4
+tint_color = Color(0.784314, 1, 0.690196, 1)
+local_offset = Vector2(18, -15)
+rotation_deg = 0.0

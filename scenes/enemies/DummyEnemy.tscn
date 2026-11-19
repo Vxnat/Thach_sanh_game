@@ -1,0 +1,93 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/dummy_enemy.gd" id="1_nsk4y"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2_dfd33"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="3_xgmky"]
+[ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="4_ehitbox"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kb8vw"]
+size = Vector2(14, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ogeps"]
+size = Vector2(16, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ehitbox"]
+resource_local_to_scene = true
+size = Vector2(14, 18)
+
+[node name="DummyEnemy" type="CharacterBody2D"]
+collision_layer = 4
+floor_snap_length = 4.0
+script = ExtResource("1_nsk4y")
+patrol_enabled = false
+patrol_distance = 28.0
+patrol_speed = 32.0
+knockback_friction = 650.0
+gravity = 980.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_kb8vw")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+
+[node name="BodyPoly" type="Polygon2D" parent="VisualRoot"]
+color = Color(0.345098, 0.207843, 0.368627, 1)
+polygon = PackedVector2Array(-7, -20, 7, -20, 7, 0, -7, 0)
+
+[node name="CrestPoly" type="Polygon2D" parent="VisualRoot"]
+color = Color(0.560784, 0.294118, 0.431373, 1)
+polygon = PackedVector2Array(-5, -22, 5, -22, 7, -18, -7, -18)
+
+[node name="EyePoly" type="Polygon2D" parent="VisualRoot"]
+color = Color(1, 0.301961, 0.301961, 1)
+polygon = PackedVector2Array(2, -16, 6, -16, 6, -13, 2, -13)
+
+[node name="HpBarBg" type="ColorRect" parent="."]
+offset_left = -8.0
+offset_top = -26.0
+offset_right = 8.0
+offset_bottom = -24.0
+color = Color(0.105882, 0.0745098, 0.109804, 1)
+
+[node name="HpBarFill" type="ColorRect" parent="HpBarBg"]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 2.0
+color = Color(0.878431, 0.309804, 0.309804, 1)
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_dfd33")
+max_hp = 45
+invincibility_duration = 0.0
+
+[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+script = ExtResource("3_xgmky")
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_ogeps")
+
+[node name="EnemyHitbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+monitoring = false
+script = ExtResource("4_ehitbox")
+damage = 12
+knockback_force = Vector2(105, -115)
+hitstop_duration = 0.04
+base_offset = Vector2(0, -10)
+source_ray_offset = Vector2(0, -10)
+check_wall_obstruction = true
+continuous_contact = true
+knockback_from_source_center = true
+active = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyHitbox"]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_ehitbox")
+disabled = true

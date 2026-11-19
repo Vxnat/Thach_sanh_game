@@ -1,0 +1,141 @@
+[gd_scene load_steps=18 format=4 uid="uid://dqlaihcauj116"]
+
+[ext_resource type="TileSet" uid="uid://drjwlkibapwe8" path="res://assets/sprites/tilesets/sandbox_tileset.tres" id="1_did5y"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2_d6b11"]
+[ext_resource type="PackedScene" path="res://scenes/props/RiverHazard.tscn" id="3_river"]
+[ext_resource type="Script" path="res://scripts/systems/day_night_light.gd" id="4_light"]
+[ext_resource type="Script" path="res://scripts/systems/spawn_point.gd" id="5_spawn"]
+[ext_resource type="PackedScene" path="res://scenes/props/StagePortal.tscn" id="6_portal"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="7_hud"]
+[ext_resource type="Script" path="res://scripts/systems/sandbox_hud.gd" id="9_jkn36"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/DummyEnemy.tscn" id="10_dummy"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/VillageNpc.tscn" id="11_npc"]
+[ext_resource type="Texture2D" uid="uid://cb8uw2oi5ba1" path="res://assets/sprites/npcs/npc_xa_phu.png" id="12_tex_xa_phu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/TravelUI.tscn" id="13_travel_ui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="14_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/props/SecretChest.tscn" id="15_secret_chest"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/WildSquirrel.tscn" id="16_wild_squirrel"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fogdy"]
+resource_local_to_scene = true
+size = Vector2(22, 22)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4mq0y"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.08, 0.08, 0.12, 0.72)
+
+[node name="TestSandbox" type="Node2D"]
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="SkyRect" type="ColorRect" parent="BackgroundLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.529412, 0.764706, 0.901961, 1)
+
+[node name="DayNightLight" type="CanvasModulate" parent="."]
+script = ExtResource("4_light")
+sky_rect_path = NodePath("../BackgroundLayer/SkyRect")
+
+[node name="GroundLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAA0AAAAAAAAAAAAAAA4AAAABAAAAAAAAAA8AAAABAAAAAAABAA0AAAAAAAAAAAABAA4AAAABAAAAAAABAA8AAAABAAAAAAACAA0AAAAAAAAAAAACAA4AAAABAAAAAAACAA8AAAABAAAAAAADAA0AAAAAAAAAAAADAA4AAAABAAAAAAADAA8AAAABAAAAAAAEAA0AAAAAAAAAAAAEAA4AAAABAAAAAAAEAA8AAAABAAAAAAAFAA0AAAAAAAAAAAAFAA4AAAABAAAAAAAFAA8AAAABAAAAAAAGAA0AAAAAAAAAAAAGAA4AAAABAAAAAAAGAA8AAAABAAAAAAAHAA0AAAAAAAAAAAAHAA4AAAABAAAAAAAHAA8AAAABAAAAAAAIAA0AAAAAAAAAAAAIAA4AAAABAAAAAAAIAA8AAAABAAAAAAAJAA0AAAAAAAAAAAAJAA4AAAABAAAAAAAJAA8AAAABAAAAAAAKAA0AAAAAAAAAAAAKAA4AAAABAAAAAAAKAA8AAAABAAAAAAALAA0AAAAAAAAAAAALAA4AAAABAAAAAAALAA8AAAABAAAAAAAMAA0AAAAAAAAAAAAMAA4AAAABAAAAAAAMAA8AAAABAAAAAAANAA0AAAAAAAAAAAANAA4AAAABAAAAAAANAA8AAAABAAAAAAAOAA0AAAAAAAAAAAAOAA4AAAABAAAAAAAOAA8AAAABAAAAAAAPAA0AAAAAAAAAAAAPAA4AAAABAAAAAAAPAA8AAAABAAAAAAAQAA0AAAAAAAAAAAAQAA4AAAABAAAAAAAQAA8AAAABAAAAAAARAA0AAAAAAAAAAAARAA4AAAABAAAAAAARAA8AAAABAAAAAAASAA0AAAAAAAAAAAASAA4AAAABAAAAAAASAA8AAAABAAAAAAATAA0AAAAAAAAAAAATAA4AAAABAAAAAAATAA8AAAABAAAAAAAUAA0AAAAAAAAAAAAUAA4AAAABAAAAAAAUAA8AAAABAAAAAAAVAA0AAAAAAAAAAAAVAA4AAAABAAAAAAAVAA8AAAABAAAAAAAWAA0AAAAAAAAAAAAWAA4AAAABAAAAAAAWAA8AAAABAAAAAAAXAA0AAAAAAAAAAAAXAA4AAAABAAAAAAAXAA8AAAABAAAAAAAYAA0AAAAAAAAAAAAYAA4AAAABAAAAAAAYAA8AAAABAAAAAAAZAA0AAAAAAAAAAAAZAA4AAAABAAAAAAAZAA8AAAABAAAAAAAaAA0AAAAAAAAAAAAaAA4AAAABAAAAAAAaAA8AAAABAAAAAAAbAA0AAAAAAAAAAAAbAA4AAAABAAAAAAAbAA8AAAABAAAAAAAcAA0AAAAAAAAAAAAcAA4AAAABAAAAAAAcAA8AAAABAAAAAAAdAA0AAAAAAAAAAAAdAA4AAAABAAAAAAAdAA8AAAABAAAAAAAeAA0AAAAAAAAAAAAeAA4AAAABAAAAAAAeAA8AAAABAAAAAAAfAA0AAAAAAAAAAAAfAA4AAAABAAAAAAAfAA8AAAABAAAAAAAjAA0AAAAAAAAAAAAjAA4AAAABAAAAAAAjAA8AAAABAAAAAAAkAA0AAAAAAAAAAAAkAA4AAAABAAAAAAAkAA8AAAABAAAAAAAlAA0AAAAAAAAAAAAlAA4AAAABAAAAAAAlAA8AAAABAAAAAAAmAA0AAAAAAAAAAAAmAA4AAAABAAAAAAAmAA8AAAABAAAAAAAnAA0AAAAAAAAAAAAnAA4AAAABAAAAAAAnAA8AAAABAAAAAAAoAA0AAAAAAAAAAAAoAA4AAAABAAAAAAAoAA8AAAABAAAAAAApAA0AAAAAAAAAAAApAA4AAAABAAAAAAApAA8AAAABAAAAAAAqAA0AAAAAAAAAAAAqAA4AAAABAAAAAAAqAA8AAAABAAAAAAArAA0AAAAAAAAAAAArAA4AAAABAAAAAAArAA8AAAABAAAAAAAsAA0AAAAAAAAAAAAsAA4AAAABAAAAAAAsAA8AAAABAAAAAAAtAA0AAAAAAAAAAAAtAA4AAAABAAAAAAAtAA8AAAABAAAAAAAuAA0AAAAAAAAAAAAuAA4AAAABAAAAAAAuAA8AAAABAAAAAAAvAA0AAAAAAAAAAAAvAA4AAAABAAAAAAAvAA8AAAABAAAAAAAAAAAAAAACAAAAAAAvAAAAAAACAAAAAAAAAAEAAAACAAAAAAAvAAEAAAACAAAAAAAAAAIAAAACAAAAAAAvAAIAAAACAAAAAAAAAAMAAAACAAAAAAAvAAMAAAACAAAAAAAAAAQAAAACAAAAAAAvAAQAAAACAAAAAAAAAAUAAAACAAAAAAAvAAUAAAACAAAAAAAAAAYAAAACAAAAAAAvAAYAAAACAAAAAAAAAAcAAAACAAAAAAAvAAcAAAACAAAAAAAAAAgAAAACAAAAAAAvAAgAAAACAAAAAAAAAAkAAAACAAAAAAAvAAkAAAACAAAAAAAAAAoAAAACAAAAAAAvAAoAAAACAAAAAAAAAAsAAAACAAAAAAAvAAsAAAACAAAAAAAAAAwAAAACAAAAAAAvAAwAAAACAAAAAAAKAAwAAAACAAAAAAALAAwAAAACAAAAAAANAAsAAAACAAAAAAANAAwAAAACAAAAAAAOAAsAAAACAAAAAAAOAAwAAAACAAAAAAAQAAoAAAACAAAAAAAQAAsAAAACAAAAAAAQAAwAAAACAAAAAAARAAoAAAACAAAAAAARAAsAAAACAAAAAAARAAwAAAACAAAAAAASAAoAAAACAAAAAAASAAsAAAACAAAAAAASAAwAAAACAAAAAAAWAAoAAAACAAAAAAAXAAoAAAACAAAAAAAYAAoAAAACAAAAAAAZAAoAAAACAAAAAAAmAAsAAAACAAAAAAAmAAwAAAACAAAAAAA=")
+tile_set = ExtResource("1_did5y")
+
+[node name="OneWayPlatformLayer" type="TileMapLayer" parent="." groups=["one_way_platforms"]]
+tile_map_data = PackedByteArray("AAAbAAoAAAADAAAAAAAcAAoAAAADAAAAAAAdAAoAAAADAAAAAAAeAAoAAAADAAAAAAAfAAoAAAADAAAAAAAeAAcAAAADAAAAAAAfAAcAAAADAAAAAAAgAAcAAAADAAAAAAAhAAcAAAADAAAAAAAiAAcAAAADAAAAAAAjAAcAAAADAAAAAAA=")
+tile_set = ExtResource("1_did5y")
+
+[node name="RiverHazard" parent="." instance=ExtResource("3_river")]
+position = Vector2(536, 228)
+
+[node name="SpawnFromHub" type="Marker2D" parent="."]
+position = Vector2(64, 208)
+script = ExtResource("5_spawn")
+spawn_id = &"from_hub"
+
+[node name="SpawnXaPhu" type="Marker2D" parent="."]
+position = Vector2(76, 208)
+script = ExtResource("5_spawn")
+spawn_id = &"xa_phu"
+
+[node name="ReturnToHubPortal" parent="." instance=ExtResource("6_portal")]
+position = Vector2(32, 208)
+target_stage_id = "hub_loc_tri"
+target_spawn_id = &"east_gate"
+portal_prompt = "[E] Về Làng Lộc Trĩ"
+
+[node name="NpcXaPhu" parent="." instance=ExtResource("11_npc")]
+position = Vector2(94, 208)
+npc_name = "Anh Xa Phu"
+dialogue_id = "xa_phu"
+role = 3
+sprite_texture = ExtResource("12_tex_xa_phu")
+default_facing = -1
+prompt_label_text = "[E] Anh Xa Phu"
+target_ui_path = NodePath("../TravelUI")
+
+[node name="DummyStationary" parent="." instance=ExtResource("10_dummy")]
+position = Vector2(132, 208)
+
+[node name="DummyAttacker" parent="." instance=ExtResource("10_dummy")]
+position = Vector2(476, 208)
+contact_damage_enabled = true
+
+[node name="DummyPatrol" parent="." instance=ExtResource("10_dummy")]
+position = Vector2(384, 208)
+patrol_enabled = true
+
+[node name="DummyBehindWall" parent="." instance=ExtResource("10_dummy")]
+position = Vector2(632, 208)
+
+[node name="WildSquirrel" parent="." instance=ExtResource("16_wild_squirrel")]
+position = Vector2(704, 208)
+
+[node name="SandboxSecretChest" parent="." instance=ExtResource("15_secret_chest")]
+position = Vector2(528, 112)
+chest_id = "sandbox_secret_chest_01"
+
+[node name="Player" parent="." instance=ExtResource("2_d6b11")]
+position = Vector2(64, 208)
+initial_mp = 20
+
+[node name="Camera2D" parent="Player" index="2"]
+limit_left = 0
+limit_top = 0
+limit_right = 768
+limit_bottom = 240
+
+[node name="CollisionShape2D" parent="Player/HitboxComponent" index="0"]
+shape = SubResource("RectangleShape2D_fogdy")
+
+[node name="HUD" parent="." instance=ExtResource("7_hud")]
+
+[node name="TravelUI" parent="." instance=ExtResource("13_travel_ui")]
+
+[node name="DialogueBox" parent="." instance=ExtResource("14_dialogue")]
+
+[node name="SandboxDebugHUD" type="CanvasLayer" parent="."]
+layer = 11
+script = ExtResource("9_jkn36")
+player_path = NodePath("../Player")
+
+[node name="DebugPanel" type="PanelContainer" parent="SandboxDebugHUD"]
+visible = false
+offset_left = 4.0
+offset_top = 34.0
+offset_right = 4.0
+offset_bottom = 34.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4mq0y")
+
+[node name="InfoLabel" type="Label" parent="SandboxDebugHUD/DebugPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.960784, 0.937255, 0.878431, 1)
+theme_override_font_sizes/font_size = 8
+text = "Sandbox Ready"
+
+[editable path="Player"]

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WeaponAnimProfile" load_steps=2 format=3 uid="uid://c1mpyml5iqsma"]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_anim_profile.gd" id="1_f7423"]
+
+[resource]
+script = ExtResource("1_f7423")
+weapon_group = 0
+ground_combo_anims = Array[StringName]([&"hammer_atk_1", &"hammer_atk_2", &"hammer_atk_3"])
+air_attack_anim = &"hammer_air"
+air_down_attack_anim = &"hammer_slam"
+anim_speed_scale = 1.0

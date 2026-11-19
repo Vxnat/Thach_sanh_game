@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=7 format=3]
+
+[ext_resource type="Resource" path="res://data/weapons/profiles/anim_hammer.tres" id="1_anim"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/combo_hammer.tres" id="2_combo"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/hitbox_hammer.tres" id="3_hitbox"]
+[ext_resource type="Script" path="res://scripts/resources/weapon_data.gd" id="4_script"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/vfx_hammer.tres" id="5_vfx"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/iron_hammer.png" id="6_tex"]
+
+[resource]
+script = ExtResource("4_script")
+id = &"weapon_iron_hammer"
+display_name = "Búa Sắt"
+description = "Búa rèn từ quặng sắt cứng, đòn bổ nặng và dậm đất Air Slam uy lực."
+weapon_texture = ExtResource("6_tex")
+bonus_atk = 16
+crit_chance = 0.08
+buy_price = 120
+craft_recipe = {
+"mat_hard_wood": 1,
+"mat_iron_ore": 2
+}
+grip_point_px = Vector2i(6, 18)
+base_rotation_deg = -45.0
+animation_profile = ExtResource("1_anim")
+hitbox_profile = ExtResource("3_hitbox")
+slash_vfx_profile = ExtResource("5_vfx")
+combo_profile = ExtResource("2_combo")
+

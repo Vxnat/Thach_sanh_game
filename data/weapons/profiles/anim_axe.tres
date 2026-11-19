@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WeaponAnimProfile" load_steps=2 format=3 uid="uid://clrsjwgdxysvy"]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_anim_profile.gd" id="1_jorlp"]
+
+[resource]
+script = ExtResource("1_jorlp")
+weapon_group = 1
+ground_combo_anims = Array[StringName]([&"axe_atk_1", &"axe_atk_2", &"axe_atk_3"])
+air_attack_anim = &"axe_air"
+air_down_attack_anim = &"axe_slam"
+anim_speed_scale = 1.05

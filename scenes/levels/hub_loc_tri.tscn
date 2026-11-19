@@ -1,0 +1,372 @@
+[gd_scene load_steps=22 format=4]
+
+[ext_resource type="Script" path="res://scripts/levels/hub_loc_tri.gd" id="1_hub"]
+[ext_resource type="TileSet" uid="uid://drjwlkibapwe8" path="res://assets/sprites/tilesets/sandbox_tileset.tres" id="2_tiles"]
+[ext_resource type="Script" path="res://scripts/systems/day_night_light.gd" id="3_light"]
+[ext_resource type="Script" path="res://scripts/systems/spawn_point.gd" id="4_spawn"]
+[ext_resource type="PackedScene" path="res://scenes/props/CottageBed.tscn" id="5_bed"]
+[ext_resource type="PackedScene" path="res://scenes/props/CottageChest.tscn" id="6_chest"]
+[ext_resource type="PackedScene" path="res://scenes/props/VillageLantern.tscn" id="7_lantern"]
+[ext_resource type="PackedScene" path="res://scenes/props/StagePortal.tscn" id="8_portal"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="9_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="10_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/StashUI.tscn" id="11_stash"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/VillageNpc.tscn" id="12_npc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npcs/npc_tho_ren.png" id="13_tex_tho_ren"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npcs/npc_tap_hoa.png" id="14_tex_tap_hoa"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npcs/npc_xa_phu.png" id="15_tex_xa_phu"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npcs/npc_ly_thong.png" id="16_tex_ly_thong"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ForgeUI.tscn" id="17_forge_ui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ShopUI.tscn" id="18_shop_ui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/TravelUI.tscn" id="19_travel_ui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="20_dialogue"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hub_atk"]
+resource_local_to_scene = true
+size = Vector2(22, 22)
+
+[node name="HubLocTri" type="Node2D"]
+script = ExtResource("1_hub")
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="SkyRect" type="ColorRect" parent="BackgroundLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.53, 0.76, 0.9, 1)
+
+[node name="DayNightLight" type="CanvasModulate" parent="."]
+script = ExtResource("3_light")
+sky_rect_path = NodePath("../BackgroundLayer/SkyRect")
+
+[node name="WorldScenery" type="Node2D" parent="."]
+z_index = -5
+
+[node name="DistantHills" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.36, 0.56, 0.45, 1)
+polygon = PackedVector2Array(0, 208, 0, 148, 120, 128, 260, 152, 410, 122, 580, 150, 740, 126, 890, 146, 960, 134, 960, 208)
+
+[node name="BambooGroveLeft" type="ColorRect" parent="WorldScenery"]
+offset_left = 18.0
+offset_top = 138.0
+offset_right = 44.0
+offset_bottom = 208.0
+color = Color(0.24, 0.44, 0.25, 1)
+
+[node name="BambooGroveMid" type="ColorRect" parent="WorldScenery"]
+offset_left = 232.0
+offset_top = 148.0
+offset_right = 286.0
+offset_bottom = 208.0
+color = Color(0.22, 0.42, 0.24, 1)
+
+[node name="BambooGroveRight" type="ColorRect" parent="WorldScenery"]
+offset_left = 744.0
+offset_top = 144.0
+offset_right = 804.0
+offset_bottom = 208.0
+color = Color(0.24, 0.44, 0.25, 1)
+
+[node name="CottageWall" type="ColorRect" parent="WorldScenery"]
+offset_left = 60.0
+offset_top = 144.0
+offset_right = 194.0
+offset_bottom = 208.0
+color = Color(0.55, 0.43, 0.3, 1)
+
+[node name="CottageDoorFrame" type="ColorRect" parent="WorldScenery"]
+offset_left = 118.0
+offset_top = 166.0
+offset_right = 144.0
+offset_bottom = 208.0
+color = Color(0.32, 0.22, 0.14, 1)
+
+[node name="CottageWindow" type="ColorRect" parent="WorldScenery"]
+offset_left = 158.0
+offset_top = 166.0
+offset_right = 178.0
+offset_bottom = 182.0
+color = Color(0.22, 0.18, 0.16, 1)
+
+[node name="CottageRoof" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.68, 0.55, 0.28, 1)
+polygon = PackedVector2Array(48, 148, 127, 114, 206, 148)
+
+[node name="CottageLabel" type="Label" parent="WorldScenery"]
+offset_left = 88.0
+offset_top = 128.0
+offset_right = 168.0
+offset_bottom = 142.0
+theme_override_colors/font_color = Color(0.98, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 7
+text = "Nhà Tranh"
+horizontal_alignment = 1
+
+[node name="ForgeBackWall" type="ColorRect" parent="WorldScenery"]
+offset_left = 316.0
+offset_top = 148.0
+offset_right = 398.0
+offset_bottom = 208.0
+color = Color(0.36, 0.26, 0.24, 1)
+
+[node name="ForgeFurnace" type="ColorRect" parent="WorldScenery"]
+offset_left = 324.0
+offset_top = 172.0
+offset_right = 350.0
+offset_bottom = 208.0
+color = Color(0.26, 0.22, 0.24, 1)
+
+[node name="ForgeEmber" type="ColorRect" parent="WorldScenery"]
+offset_left = 330.0
+offset_top = 188.0
+offset_right = 344.0
+offset_bottom = 204.0
+color = Color(0.95, 0.42, 0.14, 1)
+
+[node name="ForgeAnvil" type="ColorRect" parent="WorldScenery"]
+offset_left = 368.0
+offset_top = 196.0
+offset_right = 384.0
+offset_bottom = 208.0
+color = Color(0.35, 0.39, 0.45, 1)
+
+[node name="ForgeRoof" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.47, 0.31, 0.22, 1)
+polygon = PackedVector2Array(308, 152, 357, 128, 406, 152)
+
+[node name="ForgeLabel" type="Label" parent="WorldScenery"]
+offset_left = 320.0
+offset_top = 136.0
+offset_right = 394.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(1, 0.86, 0.65, 1)
+theme_override_font_sizes/font_size = 7
+text = "Lò Rèn"
+horizontal_alignment = 1
+
+[node name="ShopStand" type="ColorRect" parent="WorldScenery"]
+offset_left = 474.0
+offset_top = 186.0
+offset_right = 544.0
+offset_bottom = 208.0
+color = Color(0.56, 0.36, 0.21, 1)
+
+[node name="ShopCanopy" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.28, 0.56, 0.34, 1)
+polygon = PackedVector2Array(468, 156, 550, 156, 556, 168, 462, 168)
+
+[node name="ShopPostL" type="ColorRect" parent="WorldScenery"]
+offset_left = 476.0
+offset_top = 168.0
+offset_right = 480.0
+offset_bottom = 208.0
+color = Color(0.42, 0.27, 0.16, 1)
+
+[node name="ShopPostR" type="ColorRect" parent="WorldScenery"]
+offset_left = 538.0
+offset_top = 168.0
+offset_right = 542.0
+offset_bottom = 208.0
+color = Color(0.42, 0.27, 0.16, 1)
+
+[node name="ShopLabel" type="Label" parent="WorldScenery"]
+offset_left = 472.0
+offset_top = 144.0
+offset_right = 546.0
+offset_bottom = 158.0
+theme_override_colors/font_color = Color(0.9, 1, 0.85, 1)
+theme_override_font_sizes/font_size = 7
+text = "Tạp Hóa"
+horizontal_alignment = 1
+
+[node name="BanyanTrunk" type="ColorRect" parent="WorldScenery"]
+offset_left = 674.0
+offset_top = 144.0
+offset_right = 696.0
+offset_bottom = 208.0
+color = Color(0.4, 0.27, 0.18, 1)
+
+[node name="BanyanCanopy" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.22, 0.48, 0.26, 1)
+polygon = PackedVector2Array(626, 146, 650, 114, 718, 114, 742, 146, 720, 156, 648, 156)
+
+[node name="VillageGatePillarL" type="ColorRect" parent="WorldScenery"]
+offset_left = 862.0
+offset_top = 144.0
+offset_right = 872.0
+offset_bottom = 208.0
+color = Color(0.44, 0.28, 0.16, 1)
+
+[node name="VillageGatePillarR" type="ColorRect" parent="WorldScenery"]
+offset_left = 906.0
+offset_top = 144.0
+offset_right = 916.0
+offset_bottom = 208.0
+color = Color(0.44, 0.28, 0.16, 1)
+
+[node name="VillageGateRoof" type="Polygon2D" parent="WorldScenery"]
+color = Color(0.62, 0.24, 0.18, 1)
+polygon = PackedVector2Array(852, 148, 889, 126, 926, 148)
+
+[node name="CartBody" type="ColorRect" parent="WorldScenery"]
+offset_left = 806.0
+offset_top = 186.0
+offset_right = 828.0
+offset_bottom = 200.0
+color = Color(0.49, 0.31, 0.18, 1)
+
+[node name="CartWheelL" type="ColorRect" parent="WorldScenery"]
+offset_left = 808.0
+offset_top = 198.0
+offset_right = 814.0
+offset_bottom = 208.0
+color = Color(0.32, 0.2, 0.12, 1)
+
+[node name="CartWheelR" type="ColorRect" parent="WorldScenery"]
+offset_left = 820.0
+offset_top = 198.0
+offset_right = 826.0
+offset_bottom = 208.0
+color = Color(0.32, 0.2, 0.12, 1)
+
+[node name="CartPost" type="ColorRect" parent="WorldScenery"]
+offset_left = 788.0
+offset_top = 176.0
+offset_right = 791.0
+offset_bottom = 208.0
+color = Color(0.42, 0.26, 0.15, 1)
+
+[node name="CartSignLabel" type="Label" parent="WorldScenery"]
+offset_left = 768.0
+offset_top = 160.0
+offset_right = 830.0
+offset_bottom = 174.0
+theme_override_colors/font_color = Color(0.86, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "Bến Xe Ngựa"
+horizontal_alignment = 1
+
+[node name="GroundLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAA0AAAAAAAAAAAAAAA4AAAABAAAAAAABAA0AAAAAAAAAAAABAA4AAAABAAAAAAACAA0AAAAAAAAAAAACAA4AAAABAAAAAAADAA0AAAAAAAAAAAADAA4AAAABAAAAAAAEAA0AAAAAAAAAAAAEAA4AAAABAAAAAAAFAA0AAAAAAAAAAAAFAA4AAAABAAAAAAAGAA0AAAAAAAAAAAAGAA4AAAABAAAAAAAHAA0AAAAAAAAAAAAHAA4AAAABAAAAAAAIAA0AAAAAAAAAAAAIAA4AAAABAAAAAAAJAA0AAAAAAAAAAAAJAA4AAAABAAAAAAAKAA0AAAAAAAAAAAAKAA4AAAABAAAAAAALAA0AAAAAAAAAAAALAA4AAAABAAAAAAAMAA0AAAAAAAAAAAAMAA4AAAABAAAAAAANAA0AAAAAAAAAAAANAA4AAAABAAAAAAAOAA0AAAAAAAAAAAAOAA4AAAABAAAAAAAPAA0AAAAAAAAAAAAPAA4AAAABAAAAAAAQAA0AAAAAAAAAAAAQAA4AAAABAAAAAAARAA0AAAAAAAAAAAARAA4AAAABAAAAAAASAA0AAAAAAAAAAAASAA4AAAABAAAAAAATAA0AAAAAAAAAAAATAA4AAAABAAAAAAAUAA0AAAAAAAAAAAAUAA4AAAABAAAAAAAVAA0AAAAAAAAAAAAVAA4AAAABAAAAAAAWAA0AAAAAAAAAAAAWAA4AAAABAAAAAAAXAA0AAAAAAAAAAAAXAA4AAAABAAAAAAAYAA0AAAAAAAAAAAAYAA4AAAABAAAAAAAZAA0AAAAAAAAAAAAZAA4AAAABAAAAAAAaAA0AAAAAAAAAAAAaAA4AAAABAAAAAAAbAA0AAAAAAAAAAAAbAA4AAAABAAAAAAAcAA0AAAAAAAAAAAAcAA4AAAABAAAAAAAdAA0AAAAAAAAAAAAdAA4AAAABAAAAAAAeAA0AAAAAAAAAAAAeAA4AAAABAAAAAAAfAA0AAAAAAAAAAAAfAA4AAAABAAAAAAAgAA0AAAAAAAAAAAAgAA4AAAABAAAAAAAhAA0AAAAAAAAAAAAhAA4AAAABAAAAAAAiAA0AAAAAAAAAAAAiAA4AAAABAAAAAAAjAA0AAAAAAAAAAAAjAA4AAAABAAAAAAAkAA0AAAAAAAAAAAAkAA4AAAABAAAAAAAlAA0AAAAAAAAAAAAlAA4AAAABAAAAAAAmAA0AAAAAAAAAAAAmAA4AAAABAAAAAAAnAA0AAAAAAAAAAAAnAA4AAAABAAAAAAAoAA0AAAAAAAAAAAAoAA4AAAABAAAAAAApAA0AAAAAAAAAAAApAA4AAAABAAAAAAAqAA0AAAAAAAAAAAAqAA4AAAABAAAAAAArAA0AAAAAAAAAAAArAA4AAAABAAAAAAAsAA0AAAAAAAAAAAAsAA4AAAABAAAAAAAtAA0AAAAAAAAAAAAtAA4AAAABAAAAAAAuAA0AAAAAAAAAAAAuAA4AAAABAAAAAAAvAA0AAAAAAAAAAAAvAA4AAAABAAAAAAAwAA0AAAAAAAAAAAAwAA4AAAABAAAAAAAxAA0AAAAAAAAAAAAxAA4AAAABAAAAAAAyAA0AAAAAAAAAAAAyAA4AAAABAAAAAAAzAA0AAAAAAAAAAAAzAA4AAAABAAAAAAA0AA0AAAAAAAAAAAA0AA4AAAABAAAAAAA1AA0AAAAAAAAAAAA1AA4AAAABAAAAAAA2AA0AAAAAAAAAAAA2AA4AAAABAAAAAAA3AA0AAAAAAAAAAAA3AA4AAAABAAAAAAA4AA0AAAAAAAAAAAA4AA4AAAABAAAAAAA5AA0AAAAAAAAAAAA5AA4AAAABAAAAAAA6AA0AAAAAAAAAAAA6AA4AAAABAAAAAAA7AA0AAAAAAAAAAAA7AA4AAAABAAAAAAAAAAAAAAACAAAAAAA7AAAAAAACAAAAAAAAAAEAAAACAAAAAAA7AAEAAAACAAAAAAAAAAIAAAACAAAAAAA7AAIAAAACAAAAAAAAAAMAAAACAAAAAAA7AAMAAAACAAAAAAAAAAQAAAACAAAAAAA7AAQAAAACAAAAAAAAAAUAAAACAAAAAAA7AAUAAAACAAAAAAAAAAYAAAACAAAAAAA7AAYAAAACAAAAAAAAAAcAAAACAAAAAAA7AAcAAAACAAAAAAAAAAgAAAACAAAAAAA7AAgAAAACAAAAAAAAAAkAAAACAAAAAAA7AAkAAAACAAAAAAAAAAoAAAACAAAAAAA7AAoAAAACAAAAAAAAAAsAAAACAAAAAAA7AAsAAAACAAAAAAAAAAwAAAACAAAAAAA7AAwAAAACAAAAAAA=")
+tile_set = ExtResource("2_tiles")
+
+[node name="SpawnDefault" type="Marker2D" parent="."]
+position = Vector2(132, 208)
+script = ExtResource("4_spawn")
+spawn_id = &"default"
+facing_dir = 1
+
+[node name="SpawnCottageBed" type="Marker2D" parent="."]
+position = Vector2(92, 208)
+script = ExtResource("4_spawn")
+spawn_id = &"cottage_bed"
+facing_dir = 1
+
+[node name="SpawnEastGate" type="Marker2D" parent="."]
+position = Vector2(848, 208)
+script = ExtResource("4_spawn")
+spawn_id = &"east_gate"
+facing_dir = -1
+
+[node name="SpawnXaPhu" type="Marker2D" parent="."]
+position = Vector2(780, 208)
+script = ExtResource("4_spawn")
+spawn_id = &"xa_phu"
+facing_dir = -1
+
+[node name="CottageBed" parent="." instance=ExtResource("5_bed")]
+position = Vector2(92, 208)
+
+[node name="CottageChest" parent="." instance=ExtResource("6_chest")]
+position = Vector2(164, 208)
+stash_ui_path = NodePath("../StashUI")
+
+[node name="LanternHouse" parent="." instance=ExtResource("7_lantern")]
+position = Vector2(204, 208)
+
+[node name="LanternForge" parent="." instance=ExtResource("7_lantern")]
+position = Vector2(304, 208)
+
+[node name="LanternShop" parent="." instance=ExtResource("7_lantern")]
+position = Vector2(456, 208)
+
+[node name="LanternBanyan" parent="." instance=ExtResource("7_lantern")]
+position = Vector2(668, 208)
+
+[node name="LanternGate" parent="." instance=ExtResource("7_lantern")]
+position = Vector2(832, 208)
+
+[node name="EastGatePortal" parent="." instance=ExtResource("8_portal")]
+position = Vector2(888, 208)
+target_stage_id = "test_sandbox"
+target_spawn_id = &"from_hub"
+portal_prompt = "[E] Ra Bìa Rừng (Sandbox)"
+
+[node name="NpcThoRen" parent="." instance=ExtResource("12_npc")]
+position = Vector2(358, 208)
+npc_name = "Anh Thợ Rèn"
+dialogue_id = "tho_ren"
+role = 1
+sprite_texture = ExtResource("13_tex_tho_ren")
+default_facing = 1
+prompt_label_text = "[E] Anh Thợ Rèn"
+target_ui_path = NodePath("../ForgeUI")
+
+[node name="NpcTapHoa" parent="." instance=ExtResource("12_npc")]
+position = Vector2(510, 208)
+npc_name = "Cô Bé Tạp Hóa"
+dialogue_id = "tap_hoa"
+role = 2
+sprite_texture = ExtResource("14_tex_tap_hoa")
+default_facing = 1
+prompt_label_text = "[E] Cô Bé Tạp Hóa"
+target_ui_path = NodePath("../ShopUI")
+
+[node name="NpcLyThong" parent="." instance=ExtResource("12_npc")]
+position = Vector2(640, 208)
+npc_name = "Lý Thông"
+dialogue_id = "ly_thong"
+role = 0
+sprite_texture = ExtResource("16_tex_ly_thong")
+default_facing = -1
+prompt_label_text = "[E] Lý Thông"
+quest_flag_to_hide_marker = "met_ly_thong"
+
+[node name="NpcXaPhu" parent="." instance=ExtResource("12_npc")]
+position = Vector2(800, 208)
+npc_name = "Anh Xa Phu"
+dialogue_id = "xa_phu"
+role = 3
+sprite_texture = ExtResource("15_tex_xa_phu")
+default_facing = -1
+prompt_label_text = "[E] Anh Xa Phu"
+target_ui_path = NodePath("../TravelUI")
+
+[node name="Player" parent="." instance=ExtResource("9_player")]
+position = Vector2(132, 208)
+
+[node name="Camera2D" parent="Player" index="2"]
+limit_left = 0
+limit_top = 0
+limit_right = 960
+limit_bottom = 224
+
+[node name="CollisionShape2D" parent="Player/HitboxComponent" index="0"]
+shape = SubResource("RectangleShape2D_hub_atk")
+
+[node name="HUD" parent="." instance=ExtResource("10_hud")]
+
+[node name="StashUI" parent="." instance=ExtResource("11_stash")]
+
+[node name="ForgeUI" parent="." instance=ExtResource("17_forge_ui")]
+
+[node name="ShopUI" parent="." instance=ExtResource("18_shop_ui")]
+
+[node name="TravelUI" parent="." instance=ExtResource("19_travel_ui")]
+
+[node name="DialogueBox" parent="." instance=ExtResource("20_dialogue")]
+
+[editable path="Player"]
+

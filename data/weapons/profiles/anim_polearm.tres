@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WeaponAnimProfile" load_steps=2 format=3 uid="uid://c7574ucfqebnu"]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_anim_profile.gd" id="1_oroeo"]
+
+[resource]
+script = ExtResource("1_oroeo")
+weapon_group = 3
+ground_combo_anims = Array[StringName]([&"pole_atk_1", &"pole_atk_2", &"pole_atk_3"])
+air_attack_anim = &"pole_air"
+air_down_attack_anim = &"pole_pogo_down"
+anim_speed_scale = 1.0

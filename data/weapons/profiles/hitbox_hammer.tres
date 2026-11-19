@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponHitboxProfile" load_steps=2 format=3 uid="uid://b7hqv71dayu7o"]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_hitbox_profile.gd" id="1_8i7fo"]
+
+[resource]
+script = ExtResource("1_8i7fo")
+step_sizes = Array[Vector2]([Vector2(22, 22), Vector2(24, 22), Vector2(28, 24)])
+step_offsets = Array[Vector2]([Vector2(15, -13), Vector2(16, -14), Vector2(18, -12)])
+step_knockbacks = Array[Vector2]([Vector2(125, -50), Vector2(110, -40), Vector2(155, -75)])
+step_hitstops = PackedFloat32Array(0.045, 0.045, 0.06)
+air_size = Vector2(22, 20)
+air_offset = Vector2(14, -14)
+air_down_size = Vector2(30, 24)
+air_down_offset = Vector2(4, -4)

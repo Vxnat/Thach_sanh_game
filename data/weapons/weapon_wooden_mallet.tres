@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=7 format=3]
+
+[ext_resource type="Resource" path="res://data/weapons/profiles/anim_hammer.tres" id="1_70qjn"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/combo_hammer.tres" id="2_mp71q"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/hitbox_hammer.tres" id="3_hqjhp"]
+[ext_resource type="Script" path="res://scripts/resources/weapon_data.gd" id="4_3111q"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/vfx_hammer.tres" id="5_n2dt0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/wooden_mallet.png" id="6_26tua"]
+
+[resource]
+script = ExtResource("4_3111q")
+id = &"weapon_wooden_mallet"
+display_name = "Búa Gỗ"
+description = "Chiếc búa gỗ thô sơ gắn bó với Thạch Sanh tại Làng Lộc Trĩ."
+weapon_texture = ExtResource("6_26tua")
+bonus_atk = 10
+crit_chance = 0.05
+buy_price = 0
+craft_recipe = {}
+grip_point_px = Vector2i(6, 18)
+base_rotation_deg = -45.0
+animation_profile = ExtResource("1_70qjn")
+hitbox_profile = ExtResource("3_hqjhp")
+slash_vfx_profile = ExtResource("5_n2dt0")
+combo_profile = ExtResource("2_mp71q")

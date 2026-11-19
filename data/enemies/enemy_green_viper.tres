@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/enemy_data.gd" id="1_edata"]
+
+[resource]
+script = ExtResource("1_edata")
+id = &"enemy_green_viper"
+display_name = "Rắn Lục"
+max_hp = 38
+base_atk = 15
+move_speed = 54.0
+aggro_range = 96.0
+attack_range = 42.0
+patrol_distance = 30.0
+knockback_resistance = 0.15
+exp_reward = 18
+gold_min = 7
+gold_max = 11
+drop_item_id = &"mat_hard_wood"
+drop_chance_day = 0.35
+drop_chance_night = 0.6
+

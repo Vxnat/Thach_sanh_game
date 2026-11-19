@@ -1,0 +1,187 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/game_hud.gd" id="1_script"]
+[ext_resource type="Theme" path="res://assets/ui/pixel_ui_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.09, 0.075, 0.11, 0.82)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.54, 0.44, 0.28, 0.9)
+
+[node name="HUD" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_script")
+
+[node name="RootControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
+
+[node name="StatsPanel" type="PanelContainer" parent="RootControl"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 126.0
+offset_bottom = 32.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="RootControl/StatsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="TopRow" type="HBoxContainer" parent="RootControl/StatsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="LevelLabel" type="Label" parent="RootControl/StatsPanel/VBox/TopRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.89, 0.56, 1)
+theme_override_font_sizes/font_size = 7
+text = "Cấp 1"
+
+[node name="ExpBg" type="ColorRect" parent="RootControl/StatsPanel/VBox/TopRow"]
+custom_minimum_size = Vector2(48, 3)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.18, 0.15, 0.2, 1)
+
+[node name="ExpFill" type="ColorRect" parent="RootControl/StatsPanel/VBox/TopRow/ExpBg"]
+layout_mode = 0
+offset_right = 0.0
+offset_bottom = 3.0
+color = Color(0.94, 0.78, 0.32, 1)
+
+[node name="HpRow" type="HBoxContainer" parent="RootControl/StatsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="HpBg" type="ColorRect" parent="RootControl/StatsPanel/VBox/HpRow"]
+custom_minimum_size = Vector2(68, 6)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.18, 0.08, 0.1, 1)
+
+[node name="HpFill" type="ColorRect" parent="RootControl/StatsPanel/VBox/HpRow/HpBg"]
+layout_mode = 0
+offset_right = 68.0
+offset_bottom = 6.0
+color = Color(0.85, 0.23, 0.23, 1)
+
+[node name="HpLabel" type="Label" parent="RootControl/StatsPanel/VBox/HpRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.94, 0.9, 1)
+theme_override_font_sizes/font_size = 7
+text = "100/100"
+
+[node name="MpRow" type="HBoxContainer" parent="RootControl/StatsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="MpBg" type="ColorRect" parent="RootControl/StatsPanel/VBox/MpRow"]
+custom_minimum_size = Vector2(68, 5)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.08, 0.12, 0.2, 1)
+
+[node name="MpFill" type="ColorRect" parent="RootControl/StatsPanel/VBox/MpRow/MpBg"]
+layout_mode = 0
+offset_right = 68.0
+offset_bottom = 5.0
+color = Color(0.23, 0.51, 0.85, 1)
+
+[node name="MpLabel" type="Label" parent="RootControl/StatsPanel/VBox/MpRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.91, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "50/50"
+
+[node name="BeltPanel" type="PanelContainer" parent="RootControl"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 2.0
+offset_right = 278.0
+offset_bottom = 32.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="RootControl/BeltPanel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="BeltLabel" type="Label" parent="RootControl/BeltPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.84, 1)
+theme_override_font_sizes/font_size = 7
+text = "[Q]Niêu:2/2 [1]Đỏ:2/3 [2]Thảo:1/2"
+
+[node name="WeaponLabel" type="Label" parent="RootControl/BeltPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84, 0.93, 0.72, 1)
+theme_override_font_sizes/font_size = 7
+text = "Vũ khí: Búa Gỗ (Công 15)"
+
+[node name="WorldPanel" type="PanelContainer" parent="RootControl"]
+layout_mode = 0
+offset_left = 282.0
+offset_top = 2.0
+offset_right = 380.0
+offset_bottom = 32.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="RootControl/WorldPanel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="GoldLabel" type="Label" parent="RootControl/WorldPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.835294, 0.309804, 1)
+theme_override_font_sizes/font_size = 7
+text = "Vàng: 100"
+
+[node name="PhaseRow" type="HBoxContainer" parent="RootControl/WorldPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PhaseDot" type="ColorRect" parent="RootControl/WorldPanel/VBox/PhaseRow"]
+custom_minimum_size = Vector2(6, 6)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(1, 0.901961, 0.427451, 1)
+
+[node name="PhaseLabel" type="Label" parent="RootControl/WorldPanel/VBox/PhaseRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.91, 0.88, 1)
+theme_override_font_sizes/font_size = 7
+text = "Ban Ngày"
+
+[node name="ToastPanel" type="PanelContainer" parent="RootControl"]
+visible = false
+layout_mode = 0
+offset_left = 68.0
+offset_top = 36.0
+offset_right = 316.0
+offset_bottom = 54.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="ToastLabel" type="Label" parent="RootControl/ToastPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.95, 0.78, 1)
+theme_override_font_sizes/font_size = 8
+text = "Thông báo"
+horizontal_alignment = 1
+

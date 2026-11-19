@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/enemy_data.gd" id="1_edata"]
+
+[resource]
+script = ExtResource("1_edata")
+id = &"enemy_thorn_beetle"
+display_name = "Bọ Gai"
+max_hp = 45
+base_atk = 17
+move_speed = 34.0
+aggro_range = 88.0
+attack_range = 30.0
+patrol_distance = 28.0
+knockback_resistance = 0.65
+exp_reward = 22
+gold_min = 9
+gold_max = 14
+drop_item_id = &"mat_iron_ore"
+drop_chance_day = 0.45
+drop_chance_night = 0.75
+

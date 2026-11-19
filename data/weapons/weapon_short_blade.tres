@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=7 format=3]
+
+[ext_resource type="Resource" path="res://data/weapons/profiles/anim_blade.tres" id="1_qtegn"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/combo_blade.tres" id="2_xr1wr"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/hitbox_blade.tres" id="3_rcwwc"]
+[ext_resource type="Script" path="res://scripts/resources/weapon_data.gd" id="4_nxiv0"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/vfx_blade.tres" id="5_byrym"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/short_blade.png" id="6_r5j52"]
+
+[resource]
+script = ExtResource("4_nxiv0")
+id = &"weapon_short_blade"
+display_name = "Đoản Đao"
+description = "Đao ngắn sắc bén, liên trảm 3 nhịp nhanh và lơ lửng Air Stall trên không."
+weapon_texture = ExtResource("6_r5j52")
+bonus_atk = 7
+crit_chance = 0.05
+buy_price = 60
+craft_recipe = {}
+grip_point_px = Vector2i(5, 19)
+base_rotation_deg = -45.0
+animation_profile = ExtResource("1_qtegn")
+hitbox_profile = ExtResource("3_rcwwc")
+slash_vfx_profile = ExtResource("5_byrym")
+combo_profile = ExtResource("2_xr1wr")

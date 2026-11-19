@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeaponComboProfile" load_steps=2 format=3 uid="uid://cixsegb301b27"]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_combo_profile.gd" id="1_4fcok"]
+
+[resource]
+script = ExtResource("1_4fcok")
+max_steps = 3
+step_damage_multipliers = PackedFloat32Array(1, 1.15, 1.35)
+combo_window_sec = 0.25
+input_buffer_sec = 0.12
+cancel_to_dash_after_sec = 0.04
+has_air_slam = false
+air_slam_speed = 340.0
+air_stall_gravity_scale = 0.25
+pogo_bounce_velocity = -265.0

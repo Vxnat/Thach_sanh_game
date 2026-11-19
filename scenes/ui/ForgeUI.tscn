@@ -1,0 +1,200 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/forge_ui.gd" id="1_forge"]
+[ext_resource type="Theme" path="res://assets/ui/pixel_ui_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge"]
+content_margin_left = 6.0
+content_margin_top = 5.0
+content_margin_right = 6.0
+content_margin_bottom = 5.0
+bg_color = Color(0.11, 0.09, 0.12, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.56, 0.3, 1)
+
+[node name="ForgeUI" type="CanvasLayer"]
+layer = 20
+visible = false
+script = ExtResource("1_forge")
+
+[node name="RootControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+
+[node name="Backdrop" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="CenterPanel" type="PanelContainer" parent="RootControl"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 372.0
+offset_bottom = 204.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_forge")
+
+[node name="VBox" type="VBoxContainer" parent="RootControl/CenterPanel"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="HeaderRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.44, 1)
+theme_override_font_sizes/font_size = 9
+text = "LÒ RÈN"
+
+[node name="ResourceLabel" type="Label" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.9, 0.72, 1)
+theme_override_font_sizes/font_size = 8
+text = "Vàng: 100 | Gỗ: 0 | Sắt: 0"
+horizontal_alignment = 2
+
+[node name="BtnTalk" type="Button" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Hỏi thăm"
+
+[node name="BtnClose" type="Button" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Đóng [Esc]"
+
+[node name="GreetingLabel" type="Label" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84, 0.88, 0.94, 1)
+theme_override_font_sizes/font_size = 7
+text = "\"Chào Thạch Sanh!\""
+text_overrun_behavior = 3
+
+[node name="BodyRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="WeaponList" type="VBoxContainer" parent="RootControl/CenterPanel/VBox/BodyRow"]
+custom_minimum_size = Vector2(124, 0)
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="BtnWeapon_weapon_wooden_mallet" type="Button" parent="RootControl/CenterPanel/VBox/BodyRow/WeaponList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Búa Gỗ"
+alignment = 0
+clip_text = true
+
+[node name="BtnWeapon_weapon_short_blade" type="Button" parent="RootControl/CenterPanel/VBox/BodyRow/WeaponList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Đoản Đao"
+alignment = 0
+clip_text = true
+
+[node name="BtnWeapon_weapon_bamboo_spear" type="Button" parent="RootControl/CenterPanel/VBox/BodyRow/WeaponList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Mác Tre"
+alignment = 0
+clip_text = true
+
+[node name="BtnWeapon_weapon_bronze_axe" type="Button" parent="RootControl/CenterPanel/VBox/BodyRow/WeaponList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Rìu Đồng"
+alignment = 0
+clip_text = true
+
+[node name="BtnWeapon_weapon_iron_hammer" type="Button" parent="RootControl/CenterPanel/VBox/BodyRow/WeaponList"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Búa Sắt"
+alignment = 0
+clip_text = true
+
+[node name="DetailBox" type="VBoxContainer" parent="RootControl/CenterPanel/VBox/BodyRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="WeaponTopRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="WeaponIcon" type="TextureRect" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox/WeaponTopRow"]
+texture_filter = 1
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="TitleCol" type="VBoxContainer" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox/WeaponTopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="WeaponTitleLabel" type="Label" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox/WeaponTopRow/TitleCol"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+theme_override_font_sizes/font_size = 9
+text = "Búa Gỗ"
+
+[node name="WeaponGroupLabel" type="Label" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox/WeaponTopRow/TitleCol"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.64, 0.88, 0.98, 1)
+theme_override_font_sizes/font_size = 7
+text = "HAMMER -> Air Slam dậm đất"
+
+[node name="WeaponStatsLabel" type="Label" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.96, 0.66, 1)
+theme_override_font_sizes/font_size = 8
+text = "Công: +10 (Tổng 15) | Chí mạng: 5%"
+
+[node name="WeaponDescLabel" type="Label" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox"]
+custom_minimum_size = Vector2(204, 26)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.92, 0.9, 0.86, 1)
+theme_override_font_sizes/font_size = 7
+text = "Mô tả vũ khí"
+autowrap_mode = 3
+
+[node name="CostOrRecipeLabel" type="Label" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.45, 1)
+theme_override_font_sizes/font_size = 7
+text = "Giá mua: 0 Vàng"
+autowrap_mode = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BtnPrimaryAction" type="Button" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox/ActionRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Đang Trang Bị"
+
+[node name="BtnCraftAction" type="Button" parent="RootControl/CenterPanel/VBox/BodyRow/DetailBox/ActionRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Rèn Nguyên Liệu"
+

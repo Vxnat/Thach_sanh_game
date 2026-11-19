@@ -1,0 +1,165 @@
+{
+	"schema_version": 1,
+	"dialogues": {
+		"ly_thong": {
+			"speaker_name": "Lý Thông",
+			"branches": [
+				{
+					"id": "ly_thong_night_after_met",
+					"require_flags": {
+						"met_ly_thong": true
+					},
+					"require_night": true,
+					"greeting": "Đêm xuống rồi, sương tà phủ kín rừng ven làng...",
+					"lines": [
+						"Hiền đệ còn chưa nghỉ sao? Đêm nay vết nứt tà khí rỉ xuống mạnh hơn hẳn ban ngày.",
+						"Nghe đồn lũ yêu tinh ban đêm hung hãn nhưng rơi nhiều Vàng và khoáng thạch hiếm lắm... nếu đệ muốn thử sức thì cẩn trọng nhé!"
+					],
+					"set_flags": {
+						"ly_thong_suspicious_01": true
+					}
+				},
+				{
+					"id": "ly_thong_after_met",
+					"require_flags": {
+						"met_ly_thong": true
+					},
+					"greeting": "Hiền đệ nhớ ghé Thợ Rèn với Tạp Hóa trước khi lên đường nhé.",
+					"lines": [
+						"Ta vẫn ở đây ngóng tin công chúa Huỳnh Nga. Chợ búa làng ta do hai anh em Lò Rèn và Tạp Hóa lo cả rồi.",
+						"Khi nào đủ binh khí và thuốc men, đệ cứ nhờ Anh Xa Phu đưa ra Bìa Rừng hướng về Nhị Trụ Tùng tìm Tiên Ông."
+					],
+					"set_flags": {}
+				},
+				{
+					"id": "ly_thong_intro",
+					"require_flags": {},
+					"greeting": "Thạch Sanh hiền đệ! Đúng lúc lắm, ta đang tìm đệ đây.",
+					"lines": [
+						"Mấy hôm nay trời đất bỗng xé toạc một vết nứt tà khí, muông thú ngoài bìa rừng đều hóa yêu tinh hung dữ cả rồi.",
+						"Nguy hơn nữa, đoàn rước công chúa Huỳnh Nga vừa mất tích trên đường qua Nhị Trụ Tùng. Thân ta sức yếu đành nhờ hiền đệ ra tay nghĩa hiệp.",
+						"Đệ hãy ghé tiệm Anh Thợ Rèn xem binh khí, mua thêm thuốc ở Cô Bé Tạp Hóa, rồi tìm Anh Xa Phu ở cổng làng để lên đường nhé!"
+					],
+					"set_flags": {
+						"met_ly_thong": true
+					}
+				}
+			]
+		},
+		"tho_ren": {
+			"speaker_name": "Anh Thợ Rèn",
+			"branches": [
+				{
+					"id": "tho_ren_night",
+					"require_night": true,
+					"require_flags": {},
+					"greeting": "Lò rèn vẫn đỏ lửa thâu đêm chờ tráng sĩ ghé xem đồ!",
+					"lines": [
+						"Đêm xuống ngoài rừng nguy hiểm lắm, nhưng bễ rèn của ta thì chẳng bao giờ nguội.",
+						"Nếu kiếm được Gỗ Lim với Quặng Sắt ngoài rừng, mang về đây ta rèn không công cho cây Búa Sắt đánh cho sướng tay!"
+					],
+					"set_flags": {}
+				},
+				{
+					"id": "tho_ren_after_met",
+					"require_flags": {
+						"met_ly_thong": true
+					},
+					"greeting": "Nghe Lý Thông giục đệ lên Nhị Trụ Tùng à? Chọn vũ khí hợp tay đi!",
+					"lines": [
+						"Mỗi dòng vũ khí có cách đánh trên không khác nhau đấy: Búa và Rìu bổ Air Slam dậm đất; Đoản Đao chém nhanh lơ lửng; còn Mác Tre chọc xuống bật nảy Pogo.",
+						"Tạm thiếu nguyên liệu rèn Búa Sắt thì mua bằng Vàng hoặc chọn Đoản Đao, Rìu Đồng thử tay trước cũng rất ổn."
+					],
+					"set_flags": {}
+				},
+				{
+					"id": "tho_ren_default",
+					"require_flags": {},
+					"greeting": "Chào Thạch Sanh! Muốn chọn búa, rìu, đao hay mác cứ bảo ta.",
+					"lines": [
+						"Búa Gỗ cũ của cậu đánh chắc tay, nhưng ra bìa rừng gặp yêu tinh thì nên sắm thêm Rìu Đồng hoặc Đoản Đao cho linh hoạt.",
+						"Nhớ rằng bạn đã mua hay rèn món nào thì có thể đổi qua lại bất cứ lúc nào ngay tại lò rèn!"
+					],
+					"set_flags": {}
+				}
+			]
+		},
+		"tap_hoa": {
+			"speaker_name": "Cô Bé Tạp Hóa",
+			"branches": [
+				{
+					"id": "tap_hoa_night",
+					"require_night": true,
+					"require_flags": {},
+					"greeting": "Trời tối sương lạnh rồi, anh Sanh nhớ mang đủ thuốc hãy đi nhé!",
+					"lines": [
+						"Đêm khuya quái ngoài bìa rừng đánh đau hơn ban ngày đấy anh ạ.",
+						"Nếu anh mua dư bình thuốc so với ô Đai Lưng, em sẽ gửi gọn vào Rương Nhà Tranh để anh dùng dần."
+					],
+					"set_flags": {}
+				},
+				{
+					"id": "tap_hoa_after_met",
+					"require_flags": {
+						"met_ly_thong": true
+					},
+					"greeting": "Nghe anh đi tìm Tiên Ông ở Nhị Trụ Tùng, em chuẩn bị đủ thuốc đây ạ!",
+					"lines": [
+						"Đai lưng hành trang chỉ đeo được tối đa 3 Bình Thuốc Đỏ và 2 Bình Linh Thảo thôi anh nhé.",
+						"Phím [Q] ăn Niêu Cơm Thần miễn phí mỗi lần về làng nghỉ, còn phím [1] và [2] uống thuốc trên đai lưng lúc nguy cấp!"
+					],
+					"set_flags": {}
+				},
+				{
+					"id": "tap_hoa_default",
+					"require_flags": {},
+					"greeting": "Mời anh Thạch Sanh ghé quầy! Thuốc đỏ, linh thảo tươi mới đây ạ.",
+					"lines": [
+						"Quầy em có đủ Bình Thuốc Đỏ hồi máu, Bình Linh Thảo hồi MP và cả ít Gỗ Lim, Quặng Sắt cho Anh Thợ Rèn.",
+						"Mua quá sức chứa Đai Lưng cũng đừng lo, phần dư tự động cất thẳng về Rương Nhà Tranh của anh!"
+					],
+					"set_flags": {}
+				}
+			]
+		},
+		"xa_phu": {
+			"speaker_name": "Anh Xa Phu",
+			"branches": [
+				{
+					"id": "xa_phu_night",
+					"require_night": true,
+					"require_flags": {},
+					"greeting": "Đèn xe đã thắp, đi đêm hay về làng nghỉ ngơi đều sẵn sàng!",
+					"lines": [
+						"Đêm xuống đường rừng vắng lắm, nhưng ngựa nhà ta quen lối cả rồi.",
+						"Muốn săn yêu tinh ban đêm kiếm Vàng hay quay về Làng Lộc Trĩ ngủ tới sáng, cứ chọn tuyến đường nhé."
+					],
+					"set_flags": {}
+				},
+				{
+					"id": "xa_phu_after_met",
+					"require_flags": {
+						"met_ly_thong": true
+					},
+					"greeting": "Chuyến xe tới Nhị Trụ Tùng chuẩn bị khởi hành — anh lên xe chứ?",
+					"lines": [
+						"Hiện ta chạy khứ hồi giữa Làng Lộc Trĩ và khu Bìa Rừng Tập Luyện để cậu làm quen đường.",
+						"Con đường chính dẫn vào Màn 1 – Rừng Ven Làng sẽ thông xe ngay ở giai đoạn kế tiếp!"
+					],
+					"set_flags": {}
+				},
+				{
+					"id": "xa_phu_default",
+					"require_flags": {},
+					"greeting": "Xe ngựa Làng Lộc Trĩ xin chào! Muốn đi vùng nào cứ chỉ trên bản đồ.",
+					"lines": [
+						"Từ cổng làng ra ngoài Bìa Rừng hay từ ngoài rừng quay về Làng, gọi một tiếng là có chuyến ngay.",
+						"Nếu chẳng may hết máu ngoài rừng, cứ yên tâm — dân làng sẽ đưa cậu tỉnh dậy ở Nhà Tranh!"
+					],
+					"set_flags": {}
+				}
+			]
+		}
+	}
+}
+

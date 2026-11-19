@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/hazard_zone.gd" id="1_hazard"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_river"]
+resource_local_to_scene = true
+size = Vector2(48, 32)
+
+[node name="RiverHazard" type="Area2D" groups=["hazards"]]
+z_index = 5
+collision_layer = 64
+collision_mask = 2
+script = ExtResource("1_hazard")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_river")
+
+[node name="WaterDeepRect" type="ColorRect" parent="."]
+offset_left = -24.0
+offset_top = -16.0
+offset_right = 24.0
+offset_bottom = 16.0
+color = Color(0.11, 0.34, 0.56, 0.92)
+
+[node name="WaterCrestRect" type="ColorRect" parent="."]
+offset_left = -24.0
+offset_top = -16.0
+offset_right = 24.0
+offset_bottom = -14.0
+color = Color(0.68, 0.92, 1, 0.95)
+

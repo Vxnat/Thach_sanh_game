@@ -1,0 +1,164 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/shop_ui.gd" id="1_shop"]
+[ext_resource type="Theme" path="res://assets/ui/pixel_ui_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shop"]
+content_margin_left = 7.0
+content_margin_top = 6.0
+content_margin_right = 7.0
+content_margin_bottom = 6.0
+bg_color = Color(0.1, 0.11, 0.13, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42, 0.78, 0.56, 1)
+
+[node name="ShopUI" type="CanvasLayer"]
+layer = 20
+visible = false
+script = ExtResource("1_shop")
+
+[node name="RootControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+
+[node name="Backdrop" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="CenterPanel" type="PanelContainer" parent="RootControl"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = 368.0
+offset_bottom = 204.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_shop")
+
+[node name="VBox" type="VBoxContainer" parent="RootControl/CenterPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HeaderRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.96, 0.72, 1)
+theme_override_font_sizes/font_size = 9
+text = "QUẦY TẠP HÓA"
+
+[node name="GoldLabel" type="Label" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.87, 0.42, 1)
+theme_override_font_sizes/font_size = 8
+text = "Vàng: 100"
+horizontal_alignment = 2
+
+[node name="BtnTalk" type="Button" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Hỏi thăm"
+
+[node name="BtnClose" type="Button" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Đóng [Esc]"
+
+[node name="GreetingLabel" type="Label" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84, 0.9, 0.92, 1)
+theme_override_font_sizes/font_size = 7
+text = "\"Mời anh Thạch Sanh ghé quầy!\""
+text_overrun_behavior = 3
+
+[node name="CapacityLabel" type="Label" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.96, 0.84, 1)
+theme_override_font_sizes/font_size = 8
+text = "Đai Lưng: Đỏ 2/3, Thảo 1/2  |  Rương: Đỏ 0, Thảo 0"
+
+[node name="HpRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HpItemLabel" type="Label" parent="RootControl/CenterPanel/VBox/HpRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.72, 0.72, 1)
+theme_override_font_sizes/font_size = 8
+text = "Bình Thuốc Đỏ (+45 HP)"
+
+[node name="BtnBuyHp1" type="Button" parent="RootControl/CenterPanel/VBox/HpRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Mua 1 (25V)"
+
+[node name="BtnBuyHp3" type="Button" parent="RootControl/CenterPanel/VBox/HpRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Mua 3 (75V)"
+
+[node name="MpRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="MpItemLabel" type="Label" parent="RootControl/CenterPanel/VBox/MpRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.68, 0.86, 1, 1)
+theme_override_font_sizes/font_size = 8
+text = "Bình Linh Thảo (+30 MP)"
+
+[node name="BtnBuyMp1" type="Button" parent="RootControl/CenterPanel/VBox/MpRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Mua 1 (30V)"
+
+[node name="BtnBuyMp3" type="Button" parent="RootControl/CenterPanel/VBox/MpRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Mua 3 (90V)"
+
+[node name="MatRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="MatStockLabel" type="Label" parent="RootControl/CenterPanel/VBox/MatRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.94, 0.88, 0.76, 1)
+theme_override_font_sizes/font_size = 8
+text = "Nguyên liệu (Gỗ: 0, Sắt: 0)"
+
+[node name="BtnBuyWood" type="Button" parent="RootControl/CenterPanel/VBox/MatRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Gỗ Lim (15V)"
+
+[node name="BtnBuyOre" type="Button" parent="RootControl/CenterPanel/VBox/MatRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Quặng Sắt (25V)"
+
+[node name="FeedbackLabel" type="Label" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 0.9, 0.56, 1)
+theme_override_font_sizes/font_size = 7
+text = "Đai lưng đầy thì phần dư sẽ tự gửi về Rương Nhà Tranh."
+autowrap_mode = 3
+

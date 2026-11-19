@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/props/loot_pickup.gd" id="1_pickup"]
+[ext_resource type="Texture2D" path="res://assets/sprites/vfx/pickup_gold_coin.png" id="2_coin"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(8, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sensor"]
+size = Vector2(12, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hazard"]
+size = Vector2(10, 10)
+
+[node name="LootPickup" type="CharacterBody2D"]
+collision_layer = 128
+floor_snap_length = 3.0
+script = ExtResource("1_pickup")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="IconSprite" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -6)
+texture = ExtResource("2_coin")
+
+[node name="PickupSensor" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupSensor"]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_sensor")
+
+[node name="HazardDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 64
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HazardDetector"]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_hazard")
+

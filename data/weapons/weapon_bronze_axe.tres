@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=7 format=3]
+
+[ext_resource type="Resource" path="res://data/weapons/profiles/anim_axe.tres" id="1_hj7b3"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/combo_axe.tres" id="2_o4vpk"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/hitbox_axe.tres" id="3_8cdcn"]
+[ext_resource type="Script" path="res://scripts/resources/weapon_data.gd" id="4_qk64n"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/vfx_axe.tres" id="5_e2phq"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/bronze_axe.png" id="6_am2pw"]
+
+[resource]
+script = ExtResource("4_qk64n")
+id = &"weapon_bronze_axe"
+display_name = "Rìu Đồng"
+description = "Rìu lưỡi đồng quét vòng cung rộng, có đòn bổ xoáy Air Slam trên không."
+weapon_texture = ExtResource("6_am2pw")
+bonus_atk = 13
+crit_chance = 0.05
+buy_price = 80
+craft_recipe = {}
+grip_point_px = Vector2i(6, 18)
+base_rotation_deg = -45.0
+animation_profile = ExtResource("1_hj7b3")
+hitbox_profile = ExtResource("3_8cdcn")
+slash_vfx_profile = ExtResource("5_e2phq")
+combo_profile = ExtResource("2_o4vpk")

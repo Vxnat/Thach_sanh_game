@@ -1,0 +1,109 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/travel_ui.gd" id="1_travel"]
+[ext_resource type="Theme" path="res://assets/ui/pixel_ui_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_travel"]
+content_margin_left = 8.0
+content_margin_top = 7.0
+content_margin_right = 8.0
+content_margin_bottom = 7.0
+bg_color = Color(0.09, 0.11, 0.14, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.56, 0.74, 0.88, 1)
+
+[node name="TravelUI" type="CanvasLayer"]
+layer = 20
+visible = false
+script = ExtResource("1_travel")
+
+[node name="RootControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+
+[node name="Backdrop" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="CenterPanel" type="PanelContainer" parent="RootControl"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 356.0
+offset_bottom = 200.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_travel")
+
+[node name="VBox" type="VBoxContainer" parent="RootControl/CenterPanel"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HeaderRow" type="HBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.68, 0.88, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "XE NGỰA ANH XA PHU"
+
+[node name="BtnTalk" type="Button" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Hỏi thăm"
+
+[node name="BtnClose" type="Button" parent="RootControl/CenterPanel/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Đóng [Esc]"
+
+[node name="LocationLabel" type="Label" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.56, 1)
+theme_override_font_sizes/font_size = 8
+text = "Vị trí hiện tại: Làng Lộc Trĩ"
+
+[node name="GreetingLabel" type="Label" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84, 0.9, 0.94, 1)
+theme_override_font_sizes/font_size = 7
+text = "\"Xe ngựa Làng Lộc Trĩ xin chào!\""
+text_overrun_behavior = 3
+
+[node name="RouteBox" type="VBoxContainer" parent="RootControl/CenterPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="BtnTravel_hub_loc_tri" type="Button" parent="RootControl/CenterPanel/VBox/RouteBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Làng Lộc Trĩ (Khu An Toàn)"
+alignment = 0
+
+[node name="BtnTravel_test_sandbox" type="Button" parent="RootControl/CenterPanel/VBox/RouteBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Bìa Rừng Tập Luyện (Sandbox)"
+alignment = 0
+
+[node name="BtnTravel_stage_01" type="Button" parent="RootControl/CenterPanel/VBox/RouteBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Màn 1: Rừng Ven Làng (Mở ở GĐ 3)"
+alignment = 0
+

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=7 format=3]
+
+[ext_resource type="Resource" path="res://data/weapons/profiles/anim_polearm.tres" id="1_a6w5l"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/combo_polearm.tres" id="2_wmgph"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/hitbox_polearm.tres" id="3_h727a"]
+[ext_resource type="Script" path="res://scripts/resources/weapon_data.gd" id="4_33rbn"]
+[ext_resource type="Resource" path="res://data/weapons/profiles/vfx_polearm.tres" id="5_b1rpn"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/bamboo_spear.png" id="6_foblf"]
+
+[resource]
+script = ExtResource("4_33rbn")
+id = &"weapon_bamboo_spear"
+display_name = "Mác Tre"
+description = "Cán tre già mũi sắt đâm xa an toàn, đâm xuống bật nảy Pogo Bounce."
+weapon_texture = ExtResource("6_foblf")
+bonus_atk = 9
+crit_chance = 0.05
+buy_price = 70
+craft_recipe = {}
+grip_point_px = Vector2i(9, 23)
+base_rotation_deg = -45.0
+animation_profile = ExtResource("1_a6w5l")
+hitbox_profile = ExtResource("3_h727a")
+slash_vfx_profile = ExtResource("5_b1rpn")
+combo_profile = ExtResource("2_wmgph")
