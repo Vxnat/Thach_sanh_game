@@ -28,6 +28,9 @@ const SFX_PATHS: Dictionary = {
 	&"pickup_gold": "res://assets/audio/sfx/sfx_pickup_gold.wav",
 	&"pickup_item": "res://assets/audio/sfx/sfx_pickup_item.wav",
 	&"chest_open": "res://assets/audio/sfx/sfx_chest_open.wav",
+	&"relic_bow": "res://assets/audio/sfx/sfx_relic_bow.wav",
+	&"relic_lute": "res://assets/audio/sfx/sfx_relic_lute.wav",
+	&"relic_gourd": "res://assets/audio/sfx/sfx_relic_gourd.wav",
 }
 
 var _stream_cache: Dictionary = {}

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/enemy_data.gd" id="1_edata"]
+
+[resource]
+script = ExtResource("1_edata")
+id = &"elite_boar"
+display_name = "Lợn Rừng Nanh Thép"
+max_hp = 105
+base_atk = 20
+move_speed = 62.0
+aggro_range = 152.0
+attack_range = 136.0
+patrol_distance = 56.0
+knockback_resistance = 0.72
+exp_reward = 45
+gold_min = 18
+gold_max = 26
+drop_item_id = &"mat_iron_ore"
+drop_chance_day = 1.0
+drop_chance_night = 1.0
+

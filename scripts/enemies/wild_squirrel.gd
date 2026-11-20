@@ -1,6 +1,6 @@
 class_name WildSquirrel
 extends StageEnemy
-## Sóc Dại (Màn 1): tuần tra nhanh, gồng 0.26s (frame 1) rồi nhảy vồ vòng cung về phía Thạch Sanh.
+## Sóc Dại (Màn 1): tuần tra nhanh (frame 0-1), gồng 0.26s (frame 2) rồi nhảy vồ vòng cung (frame 3).
 
 enum AIState { PATROL, WINDUP, POUNCE }
 
@@ -32,8 +32,7 @@ func _step_ai(delta: float) -> void:
 
 	match _ai_state:
 		AIState.PATROL:
-			if body_sprite != null:
-				body_sprite.frame = 0
+			update_patrol_idle_anim(delta, 0.15, 0.46)
 			if p != null:
 				var dx: float = p.global_position.x - global_position.x
 				var dy: float = p.global_position.y - global_position.y
@@ -44,7 +43,7 @@ func _step_ai(delta: float) -> void:
 					_state_timer = windup_duration
 					velocity.x = 0.0
 					if body_sprite != null:
-						body_sprite.frame = 1
+						body_sprite.frame = 2
 					return
 				if patrol_enabled and dist_x <= aggro_range and absf(dy) <= 48.0:
 					_move_toward_x(p.global_position.x, spd)
@@ -58,7 +57,7 @@ func _step_ai(delta: float) -> void:
 		AIState.WINDUP:
 			velocity.x = 0.0
 			if body_sprite != null:
-				body_sprite.frame = 1
+				body_sprite.frame = 2
 			if p != null:
 				_apply_facing(1 if p.global_position.x >= global_position.x else -1)
 			if _state_timer <= 0.0:
@@ -67,12 +66,12 @@ func _step_ai(delta: float) -> void:
 				velocity.x = float(_facing_dir) * pounce_vx
 				velocity.y = pounce_vy
 				if body_sprite != null:
-					body_sprite.frame = 2
+					body_sprite.frame = 3
 
 		AIState.POUNCE:
 			_pounce_air_time += delta
 			if body_sprite != null:
-				body_sprite.frame = 2
+				body_sprite.frame = 3
 			if is_on_wall():
 				velocity.x = 0.0
 			if is_on_floor() and _pounce_air_time >= 0.12:

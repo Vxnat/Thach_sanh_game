@@ -102,7 +102,7 @@ chest_id = "sandbox_secret_chest_01"
 
 [node name="Player" parent="." instance=ExtResource("2_d6b11")]
 position = Vector2(64, 208)
-initial_mp = 20
+sandbox_allow_unowned_relics = true
 
 [node name="Camera2D" parent="Player" index="2"]
 limit_left = 0

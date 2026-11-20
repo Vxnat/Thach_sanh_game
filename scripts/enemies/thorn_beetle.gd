@@ -34,8 +34,7 @@ func _step_ai(delta: float) -> void:
 
 	match _ai_state:
 		AIState.PATROL:
-			if body_sprite != null:
-				body_sprite.frame = 0
+			update_patrol_idle_anim(delta, 0.20, 0.52)
 			if p != null:
 				var dx: float = p.global_position.x - global_position.x
 				var dy: float = p.global_position.y - global_position.y
@@ -46,7 +45,7 @@ func _step_ai(delta: float) -> void:
 					_state_timer = windup_duration
 					velocity.x = 0.0
 					if body_sprite != null:
-						body_sprite.frame = 1
+						body_sprite.frame = 2
 					return
 				if patrol_enabled and dist_x <= aggro_range and absf(dy) <= 36.0:
 					_move_toward_x(p.global_position.x, spd)
@@ -60,17 +59,17 @@ func _step_ai(delta: float) -> void:
 		AIState.GUARD_WINDUP:
 			velocity.x = 0.0
 			if body_sprite != null:
-				body_sprite.frame = 1
+				body_sprite.frame = 2
 			if _state_timer <= 0.0:
 				_ai_state = AIState.SHELL_GUARD
 				_state_timer = shell_guard_duration
 				if body_sprite != null:
-					body_sprite.frame = 2
+					body_sprite.frame = 3
 
 		AIState.SHELL_GUARD:
 			velocity.x = 0.0
 			if body_sprite != null:
-				body_sprite.frame = 2
+				body_sprite.frame = 3
 			if _state_timer <= 0.0:
 				_exit_shell_guard(guard_cooldown)
 
@@ -120,4 +119,12 @@ func _on_hurt_interrupted() -> void:
 		_attack_cooldown_timer = maxf(_attack_cooldown_timer, 0.5)
 		if body_sprite != null:
 			body_sprite.frame = 0
+
+
+func _on_stun_applied() -> void:
+	if _ai_state == AIState.SHELL_GUARD or _ai_state == AIState.GUARD_WINDUP:
+		AudioManager.play_sfx(&"slam_impact", 1.05, 1.12, -2.0)
+		_exit_shell_guard(guard_cooldown)
+	else:
+		_on_hurt_interrupted()
 

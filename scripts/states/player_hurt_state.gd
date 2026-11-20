@@ -7,6 +7,7 @@ var _stun_timer: float = 0.0
 
 func enter(_prev_state: StringName, msg: Dictionary = {}) -> void:
 	player.reset_combat_state()
+	player.clear_relic_visual()
 	player.reset_combo()
 
 	var kb: Vector2 = msg.get("knockback", Vector2.ZERO) as Vector2

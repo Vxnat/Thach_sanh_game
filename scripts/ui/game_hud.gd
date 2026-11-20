@@ -23,6 +23,7 @@ const EXP_BAR_MAX_WIDTH: float = 48.0
 
 @onready var _belt_label: Label = $RootControl/BeltPanel/VBox/BeltLabel
 @onready var _weapon_label: Label = $RootControl/BeltPanel/VBox/WeaponLabel
+@onready var _relic_label: Label = get_node_or_null("RootControl/BeltPanel/VBox/RelicLabel") as Label
 
 @onready var _gold_label: Label = $RootControl/WorldPanel/VBox/GoldLabel
 @onready var _phase_dot: ColorRect = $RootControl/WorldPanel/VBox/PhaseRow/PhaseDot
@@ -40,8 +41,24 @@ func _ready() -> void:
 		_toast_panel.visible = false
 		_toast_panel.modulate.a = 0.0
 
+	_ensure_relic_label()
 	_connect_signals()
 	refresh_all()
+
+
+func _ensure_relic_label() -> void:
+	if _relic_label != null and is_instance_valid(_relic_label):
+		return
+	var vbox: VBoxContainer = get_node_or_null("RootControl/BeltPanel/VBox") as VBoxContainer
+	if vbox == null:
+		return
+	vbox.add_theme_constant_override(&"separation", -1)
+	var lbl: Label = Label.new()
+	lbl.name = "RelicLabel"
+	lbl.add_theme_font_size_override(&"font_size", 7)
+	lbl.add_theme_color_override(&"font_color", Color(0.97, 0.84, 0.41, 1.0))
+	vbox.add_child(lbl)
+	_relic_label = lbl
 
 
 func _connect_signals() -> void:
@@ -57,6 +74,8 @@ func _connect_signals() -> void:
 		EventBus.belt_updated.connect(_on_belt_updated)
 	if not EventBus.weapon_changed.is_connected(_on_weapon_changed):
 		EventBus.weapon_changed.connect(_on_weapon_changed)
+	if not EventBus.relics_updated.is_connected(_on_relics_updated):
+		EventBus.relics_updated.connect(_on_relics_updated)
 	if not EventBus.time_phase_changed.is_connected(_on_time_phase_changed):
 		EventBus.time_phase_changed.connect(_on_time_phase_changed)
 	if not EventBus.notification_requested.is_connected(_on_notification_requested):
@@ -79,6 +98,7 @@ func refresh_all() -> void:
 		GameState.max_gourd_charges
 	)
 	_on_weapon_changed(GameState.equipped_weapon_id)
+	_update_relic_label()
 	_on_time_phase_changed(TimeManager.get_current_phase(), TimeManager.get_phase_name_vi())
 
 
@@ -98,6 +118,7 @@ func _on_mp_changed(cur_mp: int, m_mp: int) -> void:
 		_mp_fill.size.x = _mp_fill.custom_minimum_size.x
 	if _mp_label != null:
 		_mp_label.text = "%d/%d" % [cur_mp, m_mp]
+	_update_relic_label()
 
 
 func _on_level_changed(lvl: int, cur_exp: int, next_exp: int) -> void:
@@ -125,6 +146,35 @@ func _on_weapon_changed(weapon_id: StringName) -> void:
 	var atk_val: int = GameState.base_atk + (w.bonus_atk if w != null else 0)
 	if _weapon_label != null:
 		_weapon_label.text = "Vũ khí: %s (Công %d)" % [w_name, atk_val]
+
+
+func _on_relics_updated() -> void:
+	_update_relic_label()
+
+
+func _update_relic_label() -> void:
+	if _relic_label == null:
+		return
+	var sandbox_unlock: bool = false
+	var player_node: Node = get_tree().get_first_node_in_group(&"player")
+	if player_node != null and bool(player_node.get(&"sandbox_allow_unowned_relics")):
+		sandbox_unlock = true
+
+	var has_bow: bool = GameState.has_relic(&"relic_cung_ten_vang") or sandbox_unlock
+	var has_lute: bool = GameState.has_relic(&"relic_dan_than") or sandbox_unlock
+	var bow_txt: String = ("%dMP" % GameState.RELIC_CUNG_TEN_MP_COST) if has_bow else "Khóa"
+	var lute_txt: String = ("%dMP" % GameState.RELIC_DAN_THAN_MP_COST) if has_lute else "Khóa"
+	_relic_label.text = "[U]Cung:%s [I]Đàn:%s" % [bow_txt, lute_txt]
+
+	if not has_bow and not has_lute:
+		_relic_label.add_theme_color_override(&"font_color", Color(0.68, 0.65, 0.58, 1.0))
+	else:
+		var can_cast_bow: bool = has_bow and GameState.current_mp >= GameState.RELIC_CUNG_TEN_MP_COST
+		var can_cast_lute: bool = has_lute and GameState.current_mp >= GameState.RELIC_DAN_THAN_MP_COST
+		if can_cast_bow or can_cast_lute:
+			_relic_label.add_theme_color_override(&"font_color", Color(0.97, 0.84, 0.41, 1.0))
+		else:
+			_relic_label.add_theme_color_override(&"font_color", Color(0.75, 0.62, 0.45, 1.0))
 
 
 func _on_time_phase_changed(phase: int, phase_name: String) -> void:
@@ -175,6 +225,7 @@ func get_summary_snapshot() -> Dictionary:
 		"mp": _mp_label.text if _mp_label != null else "",
 		"belt": _belt_label.text if _belt_label != null else "",
 		"weapon": _weapon_label.text if _weapon_label != null else "",
+		"relics": _relic_label.text if _relic_label != null else "",
 		"gold": _gold_label.text if _gold_label != null else "",
 		"phase": _phase_label.text if _phase_label != null else "",
 	}

@@ -22,9 +22,12 @@ const BREATH_INTERVAL_SEC: float = 0.55
 @onready var _interactable: InteractableArea = $InteractableArea
 
 var _breath_timer: float = 0.0
+var _breath_interval: float = BREATH_INTERVAL_SEC
 
 
 func _ready() -> void:
+	_breath_interval = BREATH_INTERVAL_SEC + fmod(absf(global_position.x) * 0.003, 0.12) - 0.06
+	_breath_timer = fmod(absf(global_position.x * 0.017 + global_position.y * 0.011), _breath_interval)
 	if _body_sprite != null and sprite_texture != null:
 		_body_sprite.texture = sprite_texture
 	if _visual_root != null:
@@ -44,8 +47,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if _body_sprite != null and _body_sprite.hframes > 1:
 		_breath_timer += delta
-		if _breath_timer >= BREATH_INTERVAL_SEC:
-			_breath_timer -= BREATH_INTERVAL_SEC
+		if _breath_timer >= _breath_interval:
+			_breath_timer = fmod(_breath_timer, _breath_interval)
 			_body_sprite.frame = (_body_sprite.frame + 1) % _body_sprite.hframes
 
 

@@ -17,6 +17,7 @@ const COLOR_NIGHT: Color = Color("4a5685")
 var time_paused: bool = false
 var _elapsed_day_seconds: float = PHASE_DAWN_END
 var _last_phase: int = TimePhase.DAY
+var _tick_emit_accum: float = 0.0
 
 
 func _ready() -> void:
@@ -30,8 +31,14 @@ func _process(delta: float) -> void:
 	var phase: int = get_current_phase()
 	if phase != _last_phase:
 		_last_phase = phase
+		_tick_emit_accum = 0.0
 		EventBus.time_phase_changed.emit(phase, get_phase_name_vi())
-	EventBus.time_tick.emit(get_day_progress(), phase)
+		EventBus.time_tick.emit(get_day_progress(), phase)
+		return
+	_tick_emit_accum += delta
+	if _tick_emit_accum >= 0.25:
+		_tick_emit_accum = fmod(_tick_emit_accum, 0.25)
+		EventBus.time_tick.emit(get_day_progress(), phase)
 
 
 func get_current_phase() -> int:

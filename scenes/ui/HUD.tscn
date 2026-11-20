@@ -1,19 +1,31 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/game_hud.gd" id="1_script"]
 [ext_resource type="Theme" path="res://assets/ui/pixel_ui_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/ui/ui_panel_wood_bronze.png" id="3_wood"]
+[ext_resource type="Texture2D" path="res://assets/ui/ui_panel_bamboo.png" id="4_bamboo"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hud_wood"]
 content_margin_left = 4.0
 content_margin_top = 2.0
 content_margin_right = 4.0
 content_margin_bottom = 2.0
-bg_color = Color(0.09, 0.075, 0.11, 0.82)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.54, 0.44, 0.28, 0.9)
+texture = ExtResource("3_wood")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hud_bamboo"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+texture = ExtResource("4_bamboo")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
 
 [node name="HUD" type="CanvasLayer"]
 layer = 10
@@ -32,15 +44,15 @@ theme = ExtResource("2_theme")
 [node name="StatsPanel" type="PanelContainer" parent="RootControl"]
 layout_mode = 0
 offset_left = 4.0
-offset_top = 2.0
+offset_top = 1.0
 offset_right = 126.0
-offset_bottom = 32.0
+offset_bottom = 35.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxTexture_hud_wood")
 
 [node name="VBox" type="VBoxContainer" parent="RootControl/StatsPanel"]
 layout_mode = 2
-theme_override_constants/separation = 1
+theme_override_constants/separation = -1
 
 [node name="TopRow" type="HBoxContainer" parent="RootControl/StatsPanel/VBox"]
 layout_mode = 2
@@ -111,15 +123,15 @@ text = "50/50"
 [node name="BeltPanel" type="PanelContainer" parent="RootControl"]
 layout_mode = 0
 offset_left = 130.0
-offset_top = 2.0
+offset_top = 1.0
 offset_right = 278.0
-offset_bottom = 32.0
+offset_bottom = 35.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxTexture_hud_wood")
 
 [node name="VBox" type="VBoxContainer" parent="RootControl/BeltPanel"]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = -1
 
 [node name="BeltLabel" type="Label" parent="RootControl/BeltPanel/VBox"]
 layout_mode = 2
@@ -133,14 +145,20 @@ theme_override_colors/font_color = Color(0.84, 0.93, 0.72, 1)
 theme_override_font_sizes/font_size = 7
 text = "Vũ khí: Búa Gỗ (Công 15)"
 
+[node name="RelicLabel" type="Label" parent="RootControl/BeltPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.84, 0.41, 1)
+theme_override_font_sizes/font_size = 7
+text = "[U]Cung:Khóa [I]Đàn:Khóa"
+
 [node name="WorldPanel" type="PanelContainer" parent="RootControl"]
 layout_mode = 0
 offset_left = 282.0
-offset_top = 2.0
+offset_top = 1.0
 offset_right = 380.0
-offset_bottom = 32.0
+offset_bottom = 31.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxTexture_hud_wood")
 
 [node name="VBox" type="VBoxContainer" parent="RootControl/WorldPanel"]
 layout_mode = 2
@@ -176,7 +194,7 @@ offset_top = 36.0
 offset_right = 316.0
 offset_bottom = 54.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxTexture_hud_bamboo")
 
 [node name="ToastLabel" type="Label" parent="RootControl/ToastPanel"]
 layout_mode = 2

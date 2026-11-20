@@ -23,6 +23,14 @@ const STAGE_PATHS: Dictionary = {
 	"stage_02": "res://scenes/levels/stages/stage_02_nhi_tru_tung.tscn",
 }
 
+const RELIC_IDS: PackedStringArray = [
+	"relic_nieu_com",
+	"relic_cung_ten_vang",
+	"relic_dan_than",
+]
+const RELIC_CUNG_TEN_MP_COST: int = 12
+const RELIC_DAN_THAN_MP_COST: int = 16
+
 var has_active_session: bool = false
 var ui_modal_open: bool = false
 var modal_input_cooldown_frames: int = 0
@@ -51,9 +59,10 @@ var max_gourd_charges: int = 2
 var gourd_charges: int = 2
 var gourd_heal_ratio: float = 0.50
 
-# Vũ khí, nguyên liệu & tiến độ thế giới (ID chuỗi ổn định)
+# Vũ khí, pháp bảo, nguyên liệu & tiến độ thế giới (ID chuỗi ổn định)
 var equipped_weapon_id: StringName = &"weapon_wooden_mallet"
 var owned_weapons: Array[StringName] = [&"weapon_wooden_mallet"]
+var unlocked_relics: Array[StringName] = [&"relic_nieu_com"]
 var materials: Dictionary = {}
 var opened_chests: Array[String] = []
 var unlocked_stages: Array[String] = ["hub_loc_tri", "test_sandbox", "stage_01"]
@@ -62,6 +71,9 @@ var story_flags: Dictionary = {
 	"met_tien_ong": false,
 	"defeated_chan_tinh": false,
 	"stage_01_cleared": false,
+	"upgraded_nieu_com": false,
+	"unlocked_cung_ten_vang": false,
+	"unlocked_dan_than": false,
 }
 var current_stage_id: String = "test_sandbox"
 var last_spawn_id: StringName = &"default"
@@ -155,6 +167,7 @@ func reset_new_game() -> void:
 	gourd_heal_ratio = 0.50
 	equipped_weapon_id = &"weapon_wooden_mallet"
 	owned_weapons = [&"weapon_wooden_mallet"]
+	unlocked_relics = [&"relic_nieu_com"]
 	materials.clear()
 	opened_chests.clear()
 	unlocked_stages = ["hub_loc_tri", "test_sandbox", "stage_01"]
@@ -163,6 +176,9 @@ func reset_new_game() -> void:
 		"met_tien_ong": false,
 		"defeated_chan_tinh": false,
 		"stage_01_cleared": false,
+		"upgraded_nieu_com": false,
+		"unlocked_cung_ten_vang": false,
+		"unlocked_dan_than": false,
 	}
 	current_stage_id = "test_sandbox"
 	last_spawn_id = &"default"
@@ -177,6 +193,7 @@ func emit_all_state_signals() -> void:
 	EventBus.belt_updated.emit(belt_hp_count, max_belt_hp, belt_mp_count, max_belt_mp, gourd_charges, max_gourd_charges)
 	EventBus.inventory_updated.emit()
 	EventBus.weapon_changed.emit(equipped_weapon_id)
+	EventBus.relics_updated.emit()
 
 
 func get_exp_for_next_level() -> int:
@@ -434,6 +451,41 @@ func unlock_stage(stage_id: String) -> bool:
 	return true
 
 
+func is_valid_relic_id(relic_id: StringName) -> bool:
+	return RELIC_IDS.has(String(relic_id))
+
+
+func has_relic(relic_id: StringName) -> bool:
+	return unlocked_relics.has(relic_id)
+
+
+func unlock_relic(relic_id: StringName) -> bool:
+	if not is_valid_relic_id(relic_id):
+		return false
+	var added: bool = false
+	if not unlocked_relics.has(relic_id):
+		unlocked_relics.append(relic_id)
+		added = true
+	if relic_id == &"relic_cung_ten_vang":
+		set_story_flag("unlocked_cung_ten_vang", true)
+	elif relic_id == &"relic_dan_than":
+		set_story_flag("unlocked_dan_than", true)
+	if added:
+		EventBus.relics_updated.emit()
+		EventBus.inventory_updated.emit()
+	return added
+
+
+func upgrade_gourd(new_max_charges: int, new_heal_ratio: float = 0.55) -> void:
+	max_gourd_charges = maxi(max_gourd_charges, maxi(1, new_max_charges))
+	gourd_charges = max_gourd_charges
+	gourd_heal_ratio = clampf(maxf(gourd_heal_ratio, new_heal_ratio), 0.1, 1.0)
+	set_story_flag("upgraded_nieu_com", true)
+	EventBus.belt_updated.emit(belt_hp_count, max_belt_hp, belt_mp_count, max_belt_mp, gourd_charges, max_gourd_charges)
+	EventBus.relics_updated.emit()
+	EventBus.inventory_updated.emit()
+
+
 func set_story_flag(flag_key: String, value: Variant) -> void:
 	story_flags[flag_key] = value
 	EventBus.story_flag_updated.emit(flag_key, value)
@@ -447,6 +499,9 @@ func to_save_dict() -> Dictionary:
 	var owned_arr: Array[String] = []
 	for w: StringName in owned_weapons:
 		owned_arr.append(String(w))
+	var relic_arr: Array[String] = []
+	for r: StringName in unlocked_relics:
+		relic_arr.append(String(r))
 
 	return {
 		"player": {
@@ -472,6 +527,7 @@ func to_save_dict() -> Dictionary:
 			"gourd_charges": gourd_charges,
 			"gourd_heal_ratio": gourd_heal_ratio,
 			"owned_weapons": owned_arr,
+			"unlocked_relics": relic_arr,
 			"materials": materials.duplicate(true),
 		},
 		"world": {
@@ -522,6 +578,15 @@ func from_save_dict(data: Dictionary) -> bool:
 
 	var loaded_eq: StringName = StringName(String(p.get("equipped_weapon_id", "weapon_wooden_mallet")))
 	equipped_weapon_id = loaded_eq if has_weapon_id(loaded_eq) and owned_weapons.has(loaded_eq) else owned_weapons[0]
+
+	unlocked_relics.clear()
+	var raw_relics: Array = inv.get("unlocked_relics", ["relic_nieu_com"]) as Array
+	for r_var: Variant in raw_relics:
+		var rid: StringName = StringName(String(r_var))
+		if is_valid_relic_id(rid) and not unlocked_relics.has(rid):
+			unlocked_relics.append(rid)
+	if not unlocked_relics.has(&"relic_nieu_com"):
+		unlocked_relics.insert(0, &"relic_nieu_com")
 
 	materials.clear()
 	var raw_mats: Dictionary = inv.get("materials", {}) as Dictionary

@@ -117,6 +117,20 @@ Trong Godot 4.3, sử dụng **`CanvasModulate`** toàn màn hình + **`PointLig
 
 > **Lưu ý hiệu năng & thẩm mỹ:** Không chỉnh màu đêm quá tối đen (`#111122`) gây mỏi mắt khi nhảy platformer; giữ ở mức xanh lam trung tính `#4A5685` và đặt `HUD` trên `CanvasLayer` riêng để giao diện không bị tối theo trời đêm.
 
+### 3.1. Bảng Màu Khóa Cứng 32 Màu (`Master Folklore Palette`)
+Toàn bộ sprite nhân vật, vũ khí, NPC và quái được khóa trong cùng dải `32` màu (`assets/sprites/master_palette_32.png`), dùng chung đường viền tối ấm `#1E1412` để giữ độ nét và sắc thái cổ tích Việt Nam ở cả Ban Ngày lẫn Ban Đêm:
+
+| Nhóm sắc độ | Mã màu Hex | Ứng dụng chính |
+| --- | --- | --- |
+| **Viền & Trung tính (4)** | `#1E1412`, `#362624`, `#EDE3D2`, `#FFF7E4` | Viền ngoài 1px, tóc đen sâu, đai vải/quạt/nanh trắng, điểm lóe sáng |
+| **Da rám nắng (4)** | `#8E5239`, `#BA7550`, `#DF9B6D`, `#F5C193` | Da cơ bắp Thạch Sanh, Thợ Rèn, Xa Phu, dân làng |
+| **Gỗ, Tre khô & Lông Sóc (4)** | `#4B2B1B`, `#78472A`, `#A86838`, `#D69456` | Cán búa/rìu, Búa Gỗ, khố Thạch Sanh, tạp dề da, lông Sóc Dại |
+| **Chàm & Thép rèn (5)** | `#232B42`, `#394A6D`, `#587299`, `#8BA6C4`, `#C5DBE8` | Quần áo dân làng, tóc đen ánh chàm, đầu Búa Sắt, Đoản Đao, mũi Mác Tre |
+| **Đỏ sơn mài & Mắt quái (4)** | `#6E1D24`, `#AC2E31`, `#DE4E46`, `#F28A7E` | Khăn vấn đầu, viền khố, băng cổ tay, tua rua, yếm đào, khăn Thợ Rèn, mắt quái |
+| **Đồng Đông Sơn & Vàng (4)** | `#6E4E1E`, `#A67A2B`, `#DBA93E`, `#F7D569` | Lưỡi Rìu Đồng, đai búa, chắn tay đao, nón lá Xa Phu, hào quang Pháp bảo |
+| **Lá rừng & Rắn Lục (4)** | `#1E4429`, `#346E38`, `#5CA349`, `#9CD468` | Thân tre, áo xanh cốm Cô Bé Tạp Hóa, vảy & bụng Rắn Lục |
+| **Tím than & Mai Bọ Gai (3)** | `#2D1F3D`, `#51386E`, `#835CA8` | Áo dài Lý Thông, mai thép & tà khí Bọ Gai |
+
 ---
 
 ## 4. Chiến Lược Asset Public & Quy Định Kiểm Tra License
@@ -135,7 +149,7 @@ Trước khi đưa bất kỳ tài nguyên miễn phí nào (ảnh, nhạc, SFX,
   - *VFX & UI cơ bản:* Vệt chém (`Slash`), khói bụi nhảy, giọt nước bắn, khung gỗ, thanh HP/MP.
   - *Font chữ:* Font pixel hỗ trợ đầy đủ tiếng Việt có dấu (VD *Pixel Operator Việt hóa*, *VT323*, *Silver* bản Việt hóa).
 - **Ưu tiên dùng AI tạo + Hậu kỳ (Bản sắc Việt Nam):**
-  - *Thạch Sanh (`BodyBase` + `FrontArm` tách lớp):* Áo chàm/nâu Việt cổ, khăn vấn đầu hoặc tóc búi gọn, thắt lưng vải, chân trần.
+  - *Thạch Sanh (`BodyBase` + `FrontArm` tách lớp):* Cởi trần cơ bắp, đóng khố vải nâu đỏ, khăn vấn đầu, chân trần.
   - *NPC & Kiến trúc Làng Lộc Trĩ:* Nhà tranh vách đất, cổng làng/lũy tre, Anh Thợ Rèn, Cô Bé Tạp Hóa, Anh Xa Phu, Tiên Ông, Lý Thông.
   - *Vũ khí rời & Linh ảnh Pháp bảo:* Búa Gỗ, Búa Sắt, Rìu Đồng, Rìu Thần; các Pháp bảo dạng phát sáng lơ lửng (`Niêu Cơm Thần`, `Cung Tên Vàng`, `Đàn Thần`) không gắn dính vào tay.
   - *UI khung viền màn hình lẻ (GĐ 5):* Khung họa tiết đốt tre / hoa văn cổ Việt Nam trầm dịu bọc ngoài viewport `384x216` trên các màn hình có độ phân giải không chia hết.

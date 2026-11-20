@@ -22,3 +22,6 @@ export/
 Thumbs.db
 *~
 
+# Raw inbox archive (not imported by Godot)
+assets/_raw_inbox/
+

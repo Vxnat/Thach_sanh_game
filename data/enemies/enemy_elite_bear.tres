@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/enemy_data.gd" id="1_edata"]
+
+[resource]
+script = ExtResource("1_edata")
+id = &"elite_bear"
+display_name = "Gấu Đen Tà Khí"
+max_hp = 140
+base_atk = 24
+move_speed = 42.0
+aggro_range = 148.0
+attack_range = 54.0
+patrol_distance = 52.0
+knockback_resistance = 0.82
+exp_reward = 65
+gold_min = 25
+gold_max = 36
+drop_item_id = &"mat_hard_wood"
+drop_chance_day = 1.0
+drop_chance_night = 1.0
+

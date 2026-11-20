@@ -48,7 +48,7 @@ func _process(_delta: float) -> void:
 
 	_info_label.text = (
 		"%s | Lv.%d | Vang:%d | %s(%s) | HP:%d/%d | MP:%d/%d | Q:%d HP:%d/%d MP:%d/%d | %s[%s] ATK:%d | x%.2f\n"
-		+ "[A/D] Chay | [Space] Nhay | [Shift] Dash | [J] Danh | [Q/1/2] Hoi | [Tab] Doi (%s) | Anchor:(%d,%d)"
+		+ "[A/D] Chay | [Space] Nhay | [Shift] Dash | [J] Danh | [U] Cung | [I] Dan | [Q/1/2] Hoi | [Tab] Doi (%s) | Anchor:(%d,%d)"
 	) % [
 		TimeManager.get_phase_name_vi(),
 		GameState.level,

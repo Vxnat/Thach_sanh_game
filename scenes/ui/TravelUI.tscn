@@ -1,19 +1,19 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/travel_ui.gd" id="1_travel"]
 [ext_resource type="Theme" path="res://assets/ui/pixel_ui_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/ui/ui_panel_bamboo.png" id="3_bamboo"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_travel"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_travel"]
 content_margin_left = 8.0
 content_margin_top = 7.0
 content_margin_right = 8.0
 content_margin_bottom = 7.0
-bg_color = Color(0.09, 0.11, 0.14, 0.96)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.56, 0.74, 0.88, 1)
+texture = ExtResource("3_bamboo")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
 
 [node name="TravelUI" type="CanvasLayer"]
 layer = 20
@@ -44,7 +44,7 @@ offset_left = 24.0
 offset_top = 12.0
 offset_right = 360.0
 offset_bottom = 206.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_travel")
+theme_override_styles/panel = SubResource("StyleBoxTexture_travel")
 
 [node name="VBox" type="VBoxContainer" parent="RootControl/CenterPanel"]
 layout_mode = 2

@@ -1,6 +1,6 @@
 class_name GreenViper
 extends StageEnemy
-## Rắn Lục (Màn 1): thân thấp 16x12, cuộn mình 0.25s (frame 1) rồi phóng đớp ngang cực nhanh.
+## Rắn Lục (Màn 1): thân thấp 16x12, trườn/rình (frame 0-1), cuộn mình 0.25s (frame 2) rồi phóng đớp (frame 3).
 
 enum AIState { PATROL, COIL_WINDUP, STRIKE }
 
@@ -31,8 +31,7 @@ func _step_ai(delta: float) -> void:
 
 	match _ai_state:
 		AIState.PATROL:
-			if body_sprite != null:
-				body_sprite.frame = 0
+			update_patrol_idle_anim(delta, 0.18, 0.50)
 			if p != null:
 				var dx: float = p.global_position.x - global_position.x
 				var dy: float = p.global_position.y - global_position.y
@@ -43,7 +42,7 @@ func _step_ai(delta: float) -> void:
 					_state_timer = windup_duration
 					velocity.x = 0.0
 					if body_sprite != null:
-						body_sprite.frame = 1
+						body_sprite.frame = 2
 					return
 				if patrol_enabled and dist_x <= aggro_range and absf(dy) <= 36.0:
 					_move_toward_x(p.global_position.x, spd * 1.15)
@@ -57,7 +56,7 @@ func _step_ai(delta: float) -> void:
 		AIState.COIL_WINDUP:
 			velocity.x = 0.0
 			if body_sprite != null:
-				body_sprite.frame = 1
+				body_sprite.frame = 2
 			if p != null:
 				_apply_facing(1 if p.global_position.x >= global_position.x else -1)
 			if _state_timer <= 0.0:
@@ -65,11 +64,11 @@ func _step_ai(delta: float) -> void:
 				_state_timer = strike_duration
 				velocity.x = float(_facing_dir) * strike_speed
 				if body_sprite != null:
-					body_sprite.frame = 2
+					body_sprite.frame = 3
 
 		AIState.STRIKE:
 			if body_sprite != null:
-				body_sprite.frame = 2
+				body_sprite.frame = 3
 			if is_on_floor() and _is_at_ledge():
 				velocity.x = 0.0
 			else:

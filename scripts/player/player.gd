@@ -15,10 +15,14 @@ const DEFAULT_DEBUG_WEAPON_PATHS: PackedStringArray = [
 	"res://data/weapons/weapon_iron_hammer.tres",
 ]
 
+const RELIC_NIEU_COM_TEX: Texture2D = preload("res://assets/sprites/relics/relic_nieu_com.png")
+const RELIC_CUNG_TEN_TEX: Texture2D = preload("res://assets/sprites/relics/relic_cung_ten_vang.png")
+const RELIC_DAN_THAN_TEX: Texture2D = preload("res://assets/sprites/relics/relic_dan_than.png")
+
 @export_group("Di chuyển ngang")
-@export var move_speed: float = 130.0
-@export var ground_accel: float = 1100.0
-@export var ground_decel: float = 1300.0
+@export var move_speed: float = 120.0
+@export var ground_accel: float = 1200.0
+@export var ground_decel: float = 1440.0
 @export var air_accel: float = 850.0
 @export var air_decel: float = 600.0
 
@@ -58,6 +62,16 @@ const DEFAULT_DEBUG_WEAPON_PATHS: PackedStringArray = [
 @export var auto_respawn_in_sandbox: bool = true
 @export var sandbox_dead_respawn_delay: float = 1.1
 
+@export_group("Pháp bảo Cổ Tích (Bước 4.1)")
+@export var sandbox_allow_unowned_relics: bool = false
+@export var relic_buffer_duration: float = 0.12
+@export var relic_bow_mp_cost: int = 12
+@export var relic_bow_cooldown: float = 0.38
+@export var relic_lute_mp_cost: int = 16
+@export var relic_lute_cooldown: float = 0.90
+@export var golden_arrow_scene: PackedScene = preload("res://scenes/player/GoldenArrowProjectile.tscn")
+@export var dan_than_wave_scene: PackedScene = preload("res://scenes/player/DanThanSoundwave.tscn")
+
 @onready var visual_root: Node2D = $VisualRoot
 @onready var body_base_sprite: Sprite2D = $VisualRoot/BodyBaseSprite
 @onready var weapon_pivot: Marker2D = $VisualRoot/WeaponPivot
@@ -65,6 +79,7 @@ const DEFAULT_DEBUG_WEAPON_PATHS: PackedStringArray = [
 @onready var front_arm_sprite: Sprite2D = $VisualRoot/FrontArmSprite
 @onready var slash_vfx_sprite: Sprite2D = $VisualRoot/SlashVFXSprite
 @onready var relic_visual: Node2D = $VisualRoot/RelicVisual
+@onready var relic_sprite: Sprite2D = get_node_or_null("VisualRoot/RelicVisual/RelicSprite") as Sprite2D
 @onready var state_machine: PlayerStateMachine = $StateMachine
 @onready var camera: Camera2D = $Camera2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -86,6 +101,13 @@ var _air_stall_used: bool = false
 
 var _combo_next_step: int = 0
 var _combo_window_timer: float = 0.0
+
+var _buffered_relic_id: StringName = &""
+var _relic_buffer_timer: float = 0.0
+var _relic_bow_cd_timer: float = 0.0
+var _relic_lute_cd_timer: float = 0.0
+var _relic_fail_toast_cd: float = 0.0
+var _relic_visual_tween: Tween = null
 
 var _hitstop_timer: float = 0.0
 var _saved_anim_speed_scale: float = 1.0
@@ -122,6 +144,7 @@ func _ready() -> void:
 	_initial_spawn_pos = global_position
 	_safe_anchor_pos = global_position
 	_init_hazard_queries()
+	_configure_pixel_camera()
 
 	current_mp = clampi(initial_mp, 0, max_mp)
 	mp_changed.emit(current_mp, max_mp)
@@ -149,9 +172,30 @@ func _ready() -> void:
 	if equipped_weapon != null:
 		equip_weapon(equipped_weapon)
 
+	if get_parent() != null and get_parent().name == &"TestSandbox":
+		sandbox_allow_unowned_relics = true
+		current_mp = max_mp
+		GameState.current_mp = current_mp
+		mp_changed.emit(current_mp, max_mp)
+
+	_ensure_relic_cast_state()
 	reset_combat_state()
+	clear_relic_visual()
 	if state_machine != null:
 		state_machine.start()
+	EventBus.relics_updated.emit.call_deferred()
+
+
+func _ensure_relic_cast_state() -> void:
+	if state_machine == null:
+		return
+	if state_machine.get_node_or_null("RelicCast") != null:
+		return
+	var relic_state: PlayerRelicCastState = PlayerRelicCastState.new()
+	relic_state.name = "RelicCast"
+	relic_state.player = self
+	relic_state.state_machine = state_machine
+	state_machine.add_child(relic_state)
 
 
 func _ensure_debug_weapon_pool() -> void:
@@ -202,6 +246,8 @@ func _process(delta: float) -> void:
 	if not GameState.is_gameplay_locked():
 		if Input.is_action_just_pressed("debug_cycle_weapon") and not debug_weapon_pool.is_empty():
 			cycle_debug_weapon()
+		if Input.is_action_just_pressed("debug_toggle"):
+			_handle_debug_relic_helper()
 
 		_handle_quick_consumables()
 		_handle_interact_input()
@@ -248,6 +294,8 @@ func _update_timers(delta: float) -> void:
 		_jump_buffer_timer = 0.0
 		_attack_buffer_timer = 0.0
 		_dash_buffer_timer = 0.0
+		_relic_buffer_timer = 0.0
+		_buffered_relic_id = &""
 	else:
 		if Input.is_action_just_pressed("jump"):
 			_jump_buffer_timer = jump_buffer_duration
@@ -268,8 +316,25 @@ func _update_timers(delta: float) -> void:
 		elif _dash_buffer_timer > 0.0:
 			_dash_buffer_timer = maxf(0.0, _dash_buffer_timer - delta)
 
+		if Input.is_action_just_pressed("relic_1"):
+			_buffered_relic_id = &"relic_cung_ten_vang"
+			_relic_buffer_timer = relic_buffer_duration
+		elif Input.is_action_just_pressed("relic_2"):
+			_buffered_relic_id = &"relic_dan_than"
+			_relic_buffer_timer = relic_buffer_duration
+		elif _relic_buffer_timer > 0.0:
+			_relic_buffer_timer = maxf(0.0, _relic_buffer_timer - delta)
+			if _relic_buffer_timer <= 0.0:
+				_buffered_relic_id = &""
+
 	if _dash_cooldown_timer > 0.0:
 		_dash_cooldown_timer = maxf(0.0, _dash_cooldown_timer - delta)
+	if _relic_bow_cd_timer > 0.0:
+		_relic_bow_cd_timer = maxf(0.0, _relic_bow_cd_timer - delta)
+	if _relic_lute_cd_timer > 0.0:
+		_relic_lute_cd_timer = maxf(0.0, _relic_lute_cd_timer - delta)
+	if _relic_fail_toast_cd > 0.0:
+		_relic_fail_toast_cd = maxf(0.0, _relic_fail_toast_cd - delta)
 
 	if is_on_floor():
 		_coyote_timer = coyote_time_duration
@@ -597,6 +662,252 @@ func restore_mp(amount: int) -> void:
 		mp_changed.emit(current_mp, max_mp)
 
 
+func spend_mp(amount: int) -> bool:
+	if amount < 0 or current_mp < amount:
+		return false
+	current_mp -= amount
+	mp_changed.emit(current_mp, max_mp)
+	return true
+
+
+func can_use_relic(relic_id: StringName) -> bool:
+	return GameState.has_relic(relic_id) or sandbox_allow_unowned_relics
+
+
+func get_relic_mp_cost(relic_id: StringName) -> int:
+	if relic_id == &"relic_cung_ten_vang":
+		return maxi(0, relic_bow_mp_cost)
+	if relic_id == &"relic_dan_than":
+		return maxi(0, relic_lute_mp_cost)
+	return 0
+
+
+func get_relic_bow_damage() -> int:
+	var bonus: int = equipped_weapon.bonus_atk if equipped_weapon != null else weapon_atk
+	return maxi(18, int(roundf(float(base_atk + bonus) * 1.35)))
+
+
+func get_relic_lute_damage() -> int:
+	var bonus: int = equipped_weapon.bonus_atk if equipped_weapon != null else weapon_atk
+	return maxi(10, int(roundf(float(base_atk + bonus) * 0.80)))
+
+
+func try_consume_buffered_relic() -> StringName:
+	if _relic_buffer_timer <= 0.0 or _buffered_relic_id == &"":
+		return &""
+
+	var candidate: StringName = _buffered_relic_id
+	_relic_buffer_timer = 0.0
+	_buffered_relic_id = &""
+
+	if not can_use_relic(candidate):
+		var relic_title: String = "Cung Tên Vàng" if candidate == &"relic_cung_ten_vang" else "Đàn Thần"
+		_notify_relic_unavailable("Chưa mở khóa Pháp bảo %s!" % relic_title)
+		return &""
+
+	if candidate == &"relic_cung_ten_vang" and _relic_bow_cd_timer > 0.0:
+		return &""
+	if candidate == &"relic_dan_than" and _relic_lute_cd_timer > 0.0:
+		return &""
+
+	var cost: int = get_relic_mp_cost(candidate)
+	if current_mp < cost:
+		_notify_relic_unavailable("Không đủ MP (%d/%d) để dùng Pháp bảo!" % [current_mp, cost])
+		return &""
+
+	if not spend_mp(cost):
+		return &""
+
+	if candidate == &"relic_cung_ten_vang":
+		_relic_bow_cd_timer = relic_bow_cooldown
+	elif candidate == &"relic_dan_than":
+		_relic_lute_cd_timer = relic_lute_cooldown
+
+	return candidate
+
+
+func _notify_relic_unavailable(message: String) -> void:
+	if _relic_fail_toast_cd > 0.0:
+		return
+	_relic_fail_toast_cd = 0.9
+	EventBus.notification_requested.emit(message)
+
+
+func _handle_debug_relic_helper() -> void:
+	var in_sandbox: bool = get_parent() != null and get_parent().name == &"TestSandbox"
+	if in_sandbox:
+		sandbox_allow_unowned_relics = true
+		restore_mp(max_mp)
+		GameState.gourd_charges = GameState.max_gourd_charges
+		EventBus.belt_updated.emit(GameState.belt_hp_count, GameState.max_belt_hp, GameState.belt_mp_count, GameState.max_belt_mp, GameState.gourd_charges, GameState.max_gourd_charges)
+		EventBus.relics_updated.emit()
+		EventBus.notification_requested.emit("[Debug F3] Đã hồi đầy MP & Niêu Cơm Thần!")
+		return
+
+	sandbox_allow_unowned_relics = not sandbox_allow_unowned_relics
+	if sandbox_allow_unowned_relics:
+		restore_mp(max_mp)
+		GameState.gourd_charges = GameState.max_gourd_charges
+		EventBus.belt_updated.emit(GameState.belt_hp_count, GameState.max_belt_hp, GameState.belt_mp_count, GameState.max_belt_mp, GameState.gourd_charges, GameState.max_gourd_charges)
+		EventBus.notification_requested.emit("[Debug F3] Đã mở thử 3 Pháp bảo + hồi đầy MP!")
+	else:
+		EventBus.notification_requested.emit("[Debug F3] Đã tắt chế độ mở thử Pháp bảo.")
+	EventBus.relics_updated.emit()
+
+
+func _ensure_relic_sprite() -> Sprite2D:
+	if relic_visual == null:
+		return null
+	if relic_sprite == null or not is_instance_valid(relic_sprite):
+		relic_sprite = relic_visual.get_node_or_null("RelicSprite") as Sprite2D
+	if relic_sprite == null:
+		var spr: Sprite2D = Sprite2D.new()
+		spr.name = "RelicSprite"
+		spr.hframes = 2
+		spr.scale = Vector2.ONE
+		spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		relic_visual.add_child(spr)
+		relic_sprite = spr
+	return relic_sprite
+
+
+func begin_relic_cast_visual(relic_id: StringName, aim_up: bool = false) -> void:
+	if relic_visual == null:
+		return
+	if _relic_visual_tween != null and _relic_visual_tween.is_valid():
+		_relic_visual_tween.kill()
+
+	var spr: Sprite2D = _ensure_relic_sprite()
+	if spr == null:
+		return
+
+	var shoot_up: bool = aim_up or Input.is_action_pressed("move_up")
+	if relic_id == &"relic_cung_ten_vang":
+		spr.texture = RELIC_CUNG_TEN_TEX
+		relic_visual.position = Vector2(15.0, -18.0)
+		relic_visual.rotation_degrees = -28.0 if shoot_up else 0.0
+	elif relic_id == &"relic_dan_than":
+		spr.texture = RELIC_DAN_THAN_TEX
+		relic_visual.position = Vector2(12.0, -24.0)
+		relic_visual.rotation_degrees = 0.0
+	else:
+		spr.texture = RELIC_NIEU_COM_TEX
+		relic_visual.position = Vector2(10.0, -26.0)
+		relic_visual.rotation_degrees = 0.0
+
+	spr.hframes = 2
+	spr.frame = 0
+	spr.scale = Vector2.ONE
+	relic_visual.scale = Vector2.ONE
+	relic_visual.modulate = Color(1.25, 1.15, 0.78, 1.0)
+	relic_visual.visible = true
+	_relic_visual_tween = create_tween()
+	_relic_visual_tween.tween_property(relic_visual, "modulate", Color.WHITE, 0.10)
+
+
+func advance_relic_cast_visual_release(relic_id: StringName, aim_up: bool = false) -> void:
+	var spr: Sprite2D = _ensure_relic_sprite()
+	if spr != null:
+		spr.frame = 1
+	if relic_visual != null:
+		relic_visual.visible = true
+		relic_visual.scale = Vector2.ONE
+		var shoot_up: bool = aim_up or Input.is_action_pressed("move_up")
+		if relic_id == &"relic_cung_ten_vang" and shoot_up:
+			relic_visual.rotation_degrees = -28.0
+		relic_visual.modulate = Color(1.35, 1.25, 0.85, 1.0)
+
+
+func show_gourd_relic_visual() -> void:
+	if relic_visual == null:
+		return
+	if _relic_visual_tween != null and _relic_visual_tween.is_valid():
+		_relic_visual_tween.kill()
+
+	var spr: Sprite2D = _ensure_relic_sprite()
+	if spr != null:
+		spr.texture = RELIC_NIEU_COM_TEX
+		spr.hframes = 2
+		spr.frame = 0
+		spr.scale = Vector2.ONE
+
+	relic_visual.position = Vector2(10.0, -26.0)
+	relic_visual.rotation_degrees = 0.0
+	relic_visual.scale = Vector2.ONE
+	relic_visual.modulate = Color(1.25, 1.18, 0.80, 1.0)
+	relic_visual.visible = true
+
+	_relic_visual_tween = create_tween()
+	_relic_visual_tween.tween_property(relic_visual, "modulate", Color.WHITE, 0.14)
+	_relic_visual_tween.tween_callback(func() -> void:
+		if is_instance_valid(relic_sprite):
+			relic_sprite.frame = 1
+	)
+	_relic_visual_tween.tween_interval(0.16)
+	_relic_visual_tween.tween_property(relic_visual, "modulate:a", 0.0, 0.12)
+	_relic_visual_tween.tween_callback(clear_relic_visual)
+
+
+func fade_out_relic_visual(duration: float = 0.12) -> void:
+	if relic_visual == null or not relic_visual.visible:
+		return
+	if _relic_visual_tween != null and _relic_visual_tween.is_valid():
+		_relic_visual_tween.kill()
+	_relic_visual_tween = create_tween()
+	_relic_visual_tween.tween_property(relic_visual, "modulate:a", 0.0, maxf(0.02, duration))
+	_relic_visual_tween.tween_callback(clear_relic_visual)
+
+
+func clear_relic_visual() -> void:
+	if _relic_visual_tween != null and _relic_visual_tween.is_valid():
+		_relic_visual_tween.kill()
+	_relic_visual_tween = null
+	if relic_visual != null:
+		relic_visual.visible = false
+		relic_visual.rotation_degrees = 0.0
+		relic_visual.scale = Vector2.ONE
+		relic_visual.modulate = Color.WHITE
+	if relic_sprite != null and is_instance_valid(relic_sprite):
+		relic_sprite.frame = 0
+		relic_sprite.scale = Vector2.ONE
+
+
+func execute_relic_effect(relic_id: StringName, aim_up: bool = false) -> void:
+	var spawn_parent: Node = get_parent()
+	if spawn_parent == null:
+		return
+
+	if relic_id == &"relic_cung_ten_vang":
+		if golden_arrow_scene == null:
+			return
+		var arrow: GoldenArrowProjectile = golden_arrow_scene.instantiate() as GoldenArrowProjectile
+		if arrow == null:
+			return
+		var shoot_up: bool = aim_up or Input.is_action_pressed("move_up")
+		var shoot_dir: Vector2 = (
+			Vector2(float(facing_direction), -0.50).normalized()
+			if shoot_up
+			else Vector2(float(facing_direction), 0.0)
+		)
+		var chest_pos: Vector2 = global_position + Vector2(0.0, -16.0)
+		var origin_pos: Vector2 = global_position + Vector2(float(facing_direction) * 14.0, -16.0)
+		spawn_parent.add_child(arrow)
+		arrow.setup_arrow(origin_pos, shoot_dir, get_relic_bow_damage(), Vector2(135.0, -35.0), chest_pos)
+		AudioManager.play_sfx(&"relic_bow", 0.97, 1.04)
+		trigger_camera_shake(Vector2(float(facing_direction), 0.0), 1.5, 0.07)
+
+	elif relic_id == &"relic_dan_than":
+		if dan_than_wave_scene == null:
+			return
+		var wave: DanThanSoundwave = dan_than_wave_scene.instantiate() as DanThanSoundwave
+		if wave == null:
+			return
+		spawn_parent.add_child(wave)
+		wave.setup_wave(global_position + Vector2(0.0, -14.0), facing_direction, get_relic_lute_damage(), 1.8)
+		AudioManager.play_sfx(&"relic_lute", 0.98, 1.03)
+		trigger_camera_shake(Vector2(0.0, 1.0), 2.0, 0.10)
+
+
 func apply_hitstop(duration: float) -> void:
 	if duration <= 0.0:
 		return
@@ -722,7 +1033,10 @@ func _on_hitbox_hit_landed(hurtbox: HurtboxComponent, damage_dealt: int) -> void
 
 func _on_player_damaged(_amount: int, knockback: Vector2, _source: Node2D) -> void:
 	reset_combat_state()
+	clear_relic_visual()
 	reset_combo()
+	_relic_buffer_timer = 0.0
+	_buffered_relic_id = &""
 	_play_hurt_flash()
 
 	if _is_resolving_hazard:
@@ -760,11 +1074,14 @@ func _execute_hazard_resolution(hazard: HazardZone) -> void:
 		return
 
 	reset_combat_state()
+	clear_relic_visual()
 	reset_combo()
 	_jump_buffer_timer = 0.0
 	_coyote_timer = 0.0
 	_attack_buffer_timer = 0.0
 	_dash_buffer_timer = 0.0
+	_relic_buffer_timer = 0.0
+	_buffered_relic_id = &""
 	velocity = Vector2.ZERO
 
 	var ratio: float = hazard.max_hp_damage_ratio if is_instance_valid(hazard) else 0.80
@@ -793,7 +1110,12 @@ func _execute_hazard_resolution(hazard: HazardZone) -> void:
 
 func respawn_at_sandbox_start() -> void:
 	reset_combat_state()
+	clear_relic_visual()
 	reset_combo()
+	_relic_buffer_timer = 0.0
+	_buffered_relic_id = &""
+	_relic_bow_cd_timer = 0.0
+	_relic_lute_cd_timer = 0.0
 	_is_resolving_hazard = false
 	_pending_hazard_teleport = false
 	_hazard_unlock_frames = 0
@@ -810,6 +1132,19 @@ func respawn_at_sandbox_start() -> void:
 		visual_root.modulate = Color.WHITE
 	if state_machine != null:
 		state_machine.transition_to(&"Idle")
+
+
+func _configure_pixel_camera() -> void:
+	if camera == null:
+		return
+	camera.process_callback = Camera2D.CAMERA2D_PROCESS_PHYSICS
+	camera.position_smoothing_enabled = false
+	camera.drag_horizontal_enabled = true
+	camera.drag_vertical_enabled = true
+	camera.drag_left_margin = 0.0625
+	camera.drag_right_margin = 0.0625
+	camera.drag_top_margin = 16.0 / 108.0
+	camera.drag_bottom_margin = 12.0 / 108.0
 
 
 func _init_hazard_queries() -> void:
@@ -836,7 +1171,7 @@ func _update_safe_anchor() -> void:
 		return
 
 	var current_state: StringName = state_machine.get_current_state_name() if state_machine != null else &""
-	if current_state == &"Hurt" or current_state == &"Dead" or current_state == &"Dash" or current_state == &"AirAttack":
+	if current_state == &"Hurt" or current_state == &"Dead" or current_state == &"Dash" or current_state == &"AirAttack" or current_state == &"RelicCast":
 		_safe_ground_frames = 0
 		return
 
@@ -892,7 +1227,9 @@ func _is_near_hazard_margin() -> bool:
 		return false
 	var rect: RectangleShape2D = _hazard_margin_query.shape as RectangleShape2D
 	if rect != null:
-		rect.size = Vector2(12.0 + hazard_safe_margin_px * 2.0, 40.0)
+		var target_size: Vector2 = Vector2(12.0 + hazard_safe_margin_px * 2.0, 40.0)
+		if not rect.size.is_equal_approx(target_size):
+			rect.size = target_size
 	_hazard_margin_query.transform = Transform2D(0.0, global_position + Vector2(0.0, 8.0))
 	var hits: Array[Dictionary] = get_world_2d().direct_space_state.intersect_shape(_hazard_margin_query, 1)
 	return not hits.is_empty()
@@ -951,13 +1288,14 @@ func _handle_quick_consumables() -> void:
 	if s == &"Hurt" or s == &"Dead":
 		return
 
-	if Input.is_action_just_pressed("heal_pot"):
+	if Input.is_action_just_pressed("heal_pot") and can_use_relic(&"relic_nieu_com"):
 		if health_component.current_hp < health_component.max_hp:
 			var heal_amt: int = GameState.consume_gourd()
 			if heal_amt > 0:
 				health_component.heal(heal_amt)
 				_flash_tint(Color(1.2, 1.05, 0.45, 1.0))
-				AudioManager.play_sfx(&"pickup_item", 1.02, 1.08)
+				show_gourd_relic_visual()
+				AudioManager.play_sfx(&"relic_gourd", 0.98, 1.04)
 	elif Input.is_action_just_pressed("belt_hp"):
 		if health_component.current_hp < health_component.max_hp:
 			var heal_amt: int = GameState.consume_belt_hp()

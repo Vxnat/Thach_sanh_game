@@ -118,19 +118,41 @@ Không khởi tạo ồ ạt toàn bộ 5 `Autoload` và các hệ thống phứ
 - [x] Ghép nhạc nền & SFX cơ bản qua 3 bus `BGM` / `SFX` / `Ambience` (`AudioManager` Autoload, 16 file `.wav` `22050 Hz` PCM `CC0-1.0` trong `assets/audio/`, tự chuyển `amb_forest_day` ↔ `amb_night_crickets`, `StreamAudio` 2D trên `RiverHazard` và đầy đủ SFX vung vũ khí nặng/nhẹ, trúng đòn, phá giáp/dậm đất, nhảy, dash, bị thương, rơi suối, mở rương, nhặt vàng/nguyên liệu).
   - *Kiểm chứng:* Bộ test Godot 4.3 headless (`ALL_STEP_3_2_AND_3_3_TESTS_PASSED`) kiểm tra đủ 4 bus (`Master`, `BGM`, `SFX`, `Ambience`), 16 stream nạp chuẩn + `LOOP_FORWARD`, đổi nhạc nền Hub ↔ Màn 1, đổi môi trường Ngày ↔ Đêm, `StreamAudio` phát trên bus `Ambience`, và xác nhận phát trọn đủ bộ SFX hành động/chiến đấu/nhặt đồ.
 
-### Bước 3.4: Art Pass đồng bộ (Tileset Public chuẩn license + Pixel Art `1:1` cho Thạch Sanh, Làng & Quái Màn 1)
-- [ ] Sưu tầm/kiểm duyệt license (ghi vào `assets/CREDITS_AND_LICENSES.md`) cho Asset Public (`16x16` tileset rừng, VFX, UI) + Áp dụng pipeline AI & tách nền sạch (Alpha nhị phân, Import `Lossless`, căn Baseline) cùng bảng màu thống nhất cho Thạch Sanh 2 lớp (`BodyBase` + `FrontArm`, chốt thêm frame `RelicCast`), NPC Làng Lộc Trĩ, vũ khí rời và Quái Màn 1.
+### Bước 3.4a (Art Pass Đợt 1): Master Palette, Thạch Sanh 2 lớp, Vũ khí rời, NPC & Quái Màn 1 *(Đã hoàn thành)*
+- [x] Khóa bảng màu cổ tích Việt Nam thống nhất (`Master Palette` 32 màu tại `assets/sprites/master_palette_32.png`, viền tối `#1E1412`, ghi vào `docs/ART_SPEC.md` §3.1 & `CREDITS_AND_LICENSES.md`) cho toàn bộ nhân vật & sinh vật.
+- [x] Nâng cấp Pixel Art `1:1` (Alpha nhị phân `0/255`, Import `Lossless`, giữ nguyên `Baseline` & tọa độ `WeaponPivot`) cho Thạch Sanh 2 lớp (`BodyBase` + `FrontArm`, `14` frame `672x48` — cởi trần cơ bắp mặc khố, tư thế `Idle` góc `3/4` mặt khôi ngô kèm nhịp thở + chớp mắt và `relic_cast`) và 5 vũ khí rời (`wooden_mallet`, `iron_hammer`, `bronze_axe`, `short_blade`, `bamboo_spear`).
+- [x] Nâng cấp chi tiết Pixel Art `1:1` cho 4 NPC Làng Lộc Trĩ (`64x32`, thở lệch pha tự nhiên) và 3 Quái Màn 1 (`96x24`, `4` frame có nhịp thở & bước tuần tra cho *Sóc Dại*, *Rắn Lục*, *Bọ Gai*) để duyệt trực quan trong game trước khi làm môi trường.
+  - *Kiểm chứng:* Soi trực quan Contact Sheet `5x` (`preview_step_3_4a.png`) và kiểm tra tự động bằng PIL + Godot 4.3 (`ALL_IDLE_AND_FACE_VERIFICATIONS_PASSED`): kiểm tra kích thước (`672x48`, `96x24`), alpha nhị phân `0/255`, `100%` khớp bảng màu 32 màu, Baseline chạm chân `y = 47`, `hframes = 14` trên `Player` / `hframes = 4` trên 3 quái, và chạy mượt `HubLocTri`, `Stage01`, `TestSandbox` không lỗi runtime.
+
+### Bước 3.4b (Art Pass Đợt 2): Tileset `16x16`, Kiến trúc Làng Lộc Trĩ, Hậu cảnh Màn 1, VFX & Viền UI *(Đã hoàn thành)*
+- [x] Tuyển chọn/tích hợp Tileset địa hình rừng-đá-suối `16x16` chuẩn license (`sandbox_tiles_16x16.png` `64x48` & `sandbox_tileset.tres`, ghi đầy đủ vào `assets/CREDITS_AND_LICENSES.md`) kết hợp chỉnh bảng màu đồng bộ, thêm `DecorLayer` cỏ hoa/rêu đá/hàng rào/dây leo (`collision_enabled = false`) nhưng giữ nguyên 100% ô va chạm vật lý (`0:0..3:0`).
+- [x] Thay thế toàn bộ khối `ColorRect`/`Polygon2D` tạm ở hậu cảnh & đạo cụ Làng Lộc Trĩ (*Parallax núi đồi, khóm tre, Nhà Tranh, Lò Rèn, Quầy Tạp Hóa, Cây Đa, Cổng Làng, Xe Ngựa, Giường/Rương/Biển chỉ đường/Chó ngủ/Chim sẻ bay*) và Màn 1 (*Parallax 3 lớp núi rừng, cổ thụ tán tầng, hốc hang đá rêu, suối chảy động `RiverHazard`, trụ đá, bia phong ấn, cổng Nhị Trụ Tùng*) bằng Pixel Art `1:1` sắc nét (`alpha 0/255`).
+- [x] Làm sắc nét `SlashVFX`, `HitSpark` và icon vật phẩm rơi (`Pickup`), bổ sung hệ thống đom đóm đêm (`NightFireflies`) & chim sẻ ban ngày (`AmbientSkyBirds`), đồng thời đồng bộ viền gỗ lim–đồng Đông Sơn / tre trúc trên `pixel_ui_theme.tres`, `HUD` và toàn bộ 5 cửa sổ UI (`DialogueBox`, `ForgeUI`, `ShopUI`, `StashUI`, `TravelUI`).
+  - *Kiểm chứng:* Soi trực quan Contact Sheet (`preview_step_3_4b.png`), kiểm tra tự động mọi PNG mới (`semi_alpha = 0`), và chạy test tự động Godot 4.3 headless (`ALL_STEP_3_4B_TESTS_PASSED`) kiểm tra `GroundLayer`/`OneWayPlatformLayer`/`DecorLayer`, chu kỳ Ngày ↔ Đêm của `VillageLantern`/`NightFireflies`/`AmbientSkyBirds`, cả 6 UI cùng cơ chế mở cổng `Stage01`.
 
 **Tiêu chí hoàn thành (DoD):** Chơi liền mạch vòng lặp: *Khởi đầu ở Làng → Ra Rừng Ven Làng đánh quái lên cấp & cày Vàng/nguyên liệu (ngày & đêm) → Hết máu bị đưa về Làng → Mua thuốc, rèn vũ khí mạnh hơn → Phá đảo Màn 1*.
 
 ---
 
 ## Giai đoạn 4: Pháp Bảo Cổ Tích & Boss Lớn Đầu Tiên (Màn 2 – Màn 4)
-**Mục tiêu:** Mở rộng chiều sâu chiến đấu và phát triển dần cốt truyện.
-- Dựng Màn 2 (**Nhị Trụ Tùng**): Gặp **Tiên Ông**, nhận **Búa Sắt** & mở khóa Pháp bảo **Niêu Cơm Thần**.
-- Bổ sung 2 Pháp bảo tấn công qua node **`RelicVisual` (linh ảnh phát sáng lơ lửng cạnh Thạch Sanh, tách biệt khỏi `WeaponPivot`)**: **Cung Tên Vàng** (bắn xa tốn MP) và **Đàn Thần** (sóng âm choáng diện rộng tốn MP).
-- Mở rộng thêm tình tiết nghi vấn về **Lý Thông** vào file `data/dialogues/` và `story_flags`.
-- Xây dựng Màn 3 (**Miếu Hoang**) và Màn 4 (**Hang Chằn Tinh**) với **Boss Chằn Tinh** (thanh máu Boss riêng, nhiều giai đoạn đòn đánh).
+**Mục tiêu:** Mở rộng chiều sâu chiến đấu bằng 3 Pháp bảo cổ tích, phát triển dần cốt truyện nghi vấn Lý Thông và chinh phục Boss lớn đầu tiên (Chằn Tinh).
+
+### Bước 4.1: Hệ Thống 3 Pháp Bảo Cổ Tích (`RelicCast` + `RelicVisual` tách rời `WeaponPivot`), Choáng Quái & `HUD` *(Đã hoàn thành)*
+- [x] Vẽ chuẩn Pixel Art `1:1` (`Master Palette` 32 màu, alpha nhị phân `0/255`, Import `Lossless`) cho linh ảnh 3 Pháp bảo (`relic_nieu_com.png`, `relic_cung_ten_vang.png`, `relic_dan_than.png`), đạn `golden_arrow_projectile.png`, sóng âm `dan_than_soundwave.png` (4 frame `96x96`), sao choáng `stun_stars.png` và tổng hợp 3 SFX (`sfx_relic_bow.wav`, `sfx_relic_lute.wav`, `sfx_relic_gourd.wav`).
+- [x] Mở rộng `EventBus`, `GameState` (`unlocked_relics`, `unlock_relic`, `upgrade_gourd`, lưu/tải JSON tương thích ngược `save_version = 1` không chứa `res://`) và `AudioManager`.
+- [x] Cài đặt cơ chế choáng quái `apply_stun(duration)` + sao choáng overhead trên `StageEnemy`, `ThornBeetle` (phá thế cuộn vỏ gai `SHELL_GUARD`) và `DummyEnemy`.
+- [x] Dựng đạn `GoldenArrowProjectile` (xuyên tối đa 2 mục tiêu, bắn ngang hoặc chéo lên khi giữ `move_up`, tự hủy khi đụng tường, không hoàn MP cận chiến) và sóng âm `DanThanSoundwave` (4 frame mở rộng bán kính không đổi `scale`, đẩy lùi hướng tâm, gây choáng `1.8s` và đánh rớt đạn quái thuộc group `enemy_projectiles`).
+- [x] Thêm `PlayerRelicCastState` (`RelicCast`) điều khiển `"relic_cast"` + `VisualRoot/RelicVisual` giữ nguyên vũ khí trên `WeaponPivot`, nâng cấp `Q` (*Niêu Cơm Thần*) hiện linh ảnh & âm thanh riêng, cập nhật `HUD` lọt gọn `384x216`.
+  - *Kiểm chứng:* Bộ test tự động Godot 4.3 headless (`ALL_STEP_4_1_TESTS_PASSED`) vượt qua 6/6 cụm kiểm thử: nạp đủ 6 sprite `1:1` (`alpha 0/255`, `Lossless`, 100% Master Palette) + 3 SFX bus `SFX`; lưu/tải `unlocked_relics` & `upgrade_gourd` không chứa `res://` và tương thích ngược save `v1` cũ; *Niêu Cơm Thần* `[Q]` ở `Stage01` hồi `50%` HP giữ nguyên `WeaponSprite` trong khi khóa Cung/Đàn và mọi panel `HUD <= 384x40`; *Cung Tên Vàng* `[U]` tốn `12 MP`, bắn ngang/chéo lên trên không, xuyên tối đa 2 mục tiêu không hoàn MP; *Đàn Thần* `[I]` tốn `16 MP`, sóng âm 4 frame đẩy lùi hướng tâm, choáng `1.8s`, phá `SHELL_GUARD` `ThornBeetle` và đánh rớt đạn quái; bị `Hurt` giữa `RelicCast` tắt sạch `RelicVisual` & `HitboxComponent`.
+
+### Bước 4.2: Màn 2 — Nhị Trụ Tùng (`stage_02_nhi_tru_tung.tscn`), Tiên Ông, Quái Mới (`Dơi Hang` & Mini-boss `Khỉ Đá`) & Nghi Vấn Lý Thông
+- [ ] Dựng Màn 2 (**Nhị Trụ Tùng**): Gặp **Tiên Ông**, nhận **Búa Sắt**, nâng cấp **Niêu Cơm Thần** & mở khóa **Cung Tên Vàng**; thêm **Dơi Hang** (từ `32x32-bat-sprite.png`) & Mini-boss **Khỉ Đá**; mở rộng thêm tình tiết nghi vấn **Lý Thông** vào `data/dialogues/` và `story_flags`.
+
+### Bước 4.3: Màn 3 — Miếu Hoang & Rừng Sương Mù (`stage_03_mieu_hoang.tscn`), Quái Ma Trơi Tà Khí & Manh Mối Cốt Truyện
+- [ ] Dựng Màn 3 (**Miếu Hoang**): quái ma trơi/tà khí bắn đạn (`enemy_projectiles` khắc chế bằng *Đàn Thần*), ngách ẩn & manh mối âm mưu Lý Thông.
+
+### Bước 4.4: Màn 4 — Hang Chằn Tinh (`stage_04_hang_chan_tinh.tscn`) & Boss Lớn Đầu Tiên: Chằn Tinh
+- [ ] Dựng Màn 4 (**Hang Chằn Tinh**) với **Boss Chằn Tinh** (thanh máu Boss riêng, nhiều giai đoạn đòn đánh) và mở khóa Pháp bảo **Đàn Thần**.
 
 **Tiêu chí hoàn thành (DoD):** Chiến thắng được Boss Chằn Tinh bằng cách phối hợp lướt né `Dash`, đánh vũ khí Thợ Rèn và dùng Pháp bảo MP.
 

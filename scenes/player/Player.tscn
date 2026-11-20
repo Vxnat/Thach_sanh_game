@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3]
+[gd_scene load_steps=62 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1_g68wp"]
 [ext_resource type="Resource" path="res://data/weapons/weapon_wooden_mallet.tres" id="2_ju8c2"]
@@ -24,6 +24,7 @@
 [ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="19_vw7qe"]
 [ext_resource type="Script" path="res://scripts/states/player_hurt_state.gd" id="20_af60o"]
 [ext_resource type="Script" path="res://scripts/states/player_dead_state.gd" id="21_s74sr"]
+[ext_resource type="Script" path="res://scripts/states/player_relic_cast_state.gd" id="22_relic_cast"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ui3ql"]
 size = Vector2(12, 26)
@@ -76,7 +77,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [-20.0]
+"values": [34.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -1475,7 +1476,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [-40.0]
+"values": [44.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -2163,7 +2164,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [-35.0]
+"values": [-45.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -2175,7 +2176,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [1]
+"values": [-1]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -2203,7 +2204,7 @@ tracks/6/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_566kc"]
-length = 0.5
+length = 2.8
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2212,10 +2213,10 @@ tracks/0/path = NodePath("VisualRoot/BodyBaseSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.45, 0.9, 1.35, 1.8, 2.25, 2.68, 2.72),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 1]
+"values": [0, 1, 0, 1, 0, 1, 0, 13]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -2224,10 +2225,10 @@ tracks/1/path = NodePath("VisualRoot/FrontArmSprite:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.25),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.45, 0.9, 1.35, 1.8, 2.25, 2.68, 2.72),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 1]
+"values": [0, 1, 0, 1, 0, 1, 0, 13]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -2236,10 +2237,10 @@ tracks/2/path = NodePath("VisualRoot/WeaponPivot:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.25),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.45, 0.9, 1.35, 1.8, 2.25, 2.68),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [Vector2(3, -14), Vector2(3, -13)]
+"values": [Vector2(3, -14), Vector2(3, -13), Vector2(3, -14), Vector2(3, -13), Vector2(3, -14), Vector2(3, -13), Vector2(3, -14)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -2248,10 +2249,10 @@ tracks/3/path = NodePath("VisualRoot/WeaponPivot:rotation_degrees")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.25),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.45, 0.9, 1.35, 1.8, 2.25, 2.68),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [-20.0, -18.0]
+"values": [34.0, 36.0, 34.0, 36.0, 34.0, 36.0, 34.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -2338,7 +2339,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [-32.0]
+"values": [42.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -2887,10 +2888,10 @@ tracks/0/path = NodePath("VisualRoot/BodyBaseSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.12, 0.24),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.09, 0.18, 0.27),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [2, 3, 4]
+"values": [2, 3, 4, 3]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -2899,10 +2900,10 @@ tracks/1/path = NodePath("VisualRoot/FrontArmSprite:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.12, 0.24),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.09, 0.18, 0.27),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [2, 3, 4]
+"values": [2, 3, 4, 3]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -2911,10 +2912,10 @@ tracks/2/path = NodePath("VisualRoot/WeaponPivot:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.12, 0.24),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.09, 0.18, 0.27),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [Vector2(1, -14), Vector2(3, -15), Vector2(5, -14)]
+"values": [Vector2(2, -14), Vector2(3, -15), Vector2(4, -14), Vector2(3, -15)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -2923,10 +2924,10 @@ tracks/3/path = NodePath("VisualRoot/WeaponPivot:rotation_degrees")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.12, 0.24),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.09, 0.18, 0.27),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [-28.0, -20.0, -12.0]
+"values": [38.0, 40.0, 42.0, 40.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -3053,6 +3054,93 @@ tracks/6/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_relic_cast"]
+length = 0.28
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VisualRoot/BodyBaseSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.24),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [12, 0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VisualRoot/FrontArmSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.24),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [12, 0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("VisualRoot/WeaponPivot:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.24),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(-2, -14), Vector2(3, -14)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("VisualRoot/WeaponPivot:rotation_degrees")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.24),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [-140.0, 34.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("VisualRoot/WeaponPivot:z_index")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("VisualRoot/SlashVFXSprite:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("HitboxComponent:active")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v1u23"]
 _data = {
 "RESET": SubResource("Animation_0vbrc"),
@@ -3085,6 +3173,7 @@ _data = {
 "pole_atk_2": SubResource("Animation_ppj6d"),
 "pole_atk_3": SubResource("Animation_rrrms"),
 "pole_pogo_down": SubResource("Animation_w5l8f"),
+"relic_cast": SubResource("Animation_relic_cast"),
 "run": SubResource("Animation_rgqd6")
 }
 
@@ -3099,9 +3188,9 @@ size = Vector2(10, 24)
 collision_layer = 2
 floor_snap_length = 4.0
 script = ExtResource("1_g68wp")
-move_speed = 130.0
-ground_accel = 1100.0
-ground_decel = 1300.0
+move_speed = 120.0
+ground_accel = 1200.0
+ground_decel = 1440.0
 air_accel = 850.0
 air_decel = 600.0
 jump_velocity = -295.0
@@ -3141,12 +3230,12 @@ shape = SubResource("RectangleShape2D_ui3ql")
 texture = ExtResource("7_lt8ww")
 centered = false
 offset = Vector2(-24, -48)
-hframes = 12
+hframes = 14
 
 [node name="WeaponPivot" type="Marker2D" parent="VisualRoot"]
 z_index = 1
 position = Vector2(3, -14)
-rotation = -0.349066
+rotation = 0.593412
 
 [node name="WeaponSprite" type="Sprite2D" parent="VisualRoot/WeaponPivot"]
 rotation = -0.785398
@@ -3159,7 +3248,7 @@ z_index = 2
 texture = ExtResource("9_lywyb")
 centered = false
 offset = Vector2(-24, -48)
-hframes = 12
+hframes = 14
 
 [node name="SlashVFXSprite" type="Sprite2D" parent="VisualRoot"]
 visible = false
@@ -3173,14 +3262,19 @@ vframes = 4
 visible = false
 z_index = 4
 
+[node name="RelicSprite" type="Sprite2D" parent="VisualRoot/RelicVisual"]
+texture_filter = 1
+hframes = 2
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -16)
+process_callback = 0
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
-drag_left_margin = 0.08
-drag_top_margin = 0.15
-drag_right_margin = 0.08
-drag_bottom_margin = 0.1
+drag_left_margin = 0.0625
+drag_top_margin = 0.148148
+drag_right_margin = 0.0625
+drag_bottom_margin = 0.111111
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("11_fdbsd")
@@ -3212,6 +3306,9 @@ script = ExtResource("20_af60o")
 
 [node name="Dead" type="Node" parent="StateMachine"]
 script = ExtResource("21_s74sr")
+
+[node name="RelicCast" type="Node" parent="StateMachine"]
+script = ExtResource("22_relic_cast")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 callback_mode_process = 0

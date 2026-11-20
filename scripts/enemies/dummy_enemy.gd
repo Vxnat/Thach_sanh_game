@@ -1,6 +1,8 @@
 class_name DummyEnemy
 extends CharacterBody2D
-## Bia tập / quái khối thử nghiệm cho Bước 1.2 (Baseline Stats: 45 HP, xuyên thân Player).
+## Bia tập / quái khối thử nghiệm cho Bước 1.2 & test Pháp bảo (Baseline Stats: 45 HP, xuyên thân Player).
+
+const STUN_STARS_TEX: Texture2D = preload("res://assets/sprites/vfx/stun_stars.png")
 
 @export var patrol_enabled: bool = false
 @export var patrol_distance: float = 28.0
@@ -22,8 +24,11 @@ var _spawn_x: float = 0.0
 var _patrol_dir: int = 1
 var _knockback_lock_timer: float = 0.0
 var _hitstop_timer: float = 0.0
+var _stun_timer: float = 0.0
+var _stun_anim_timer: float = 0.0
 var _is_dead: bool = false
 var _flash_tween: Tween = null
+var _stun_indicator: Sprite2D = null
 
 
 func _ready() -> void:
@@ -58,6 +63,25 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y = minf(velocity.y + gravity * delta, 360.0)
 
+	if _stun_timer > 0.0:
+		_stun_timer = maxf(0.0, _stun_timer - delta)
+		_stun_anim_timer += delta
+		if _stun_indicator != null:
+			_stun_indicator.visible = true
+			if _stun_anim_timer >= 0.16:
+				_stun_anim_timer = fmod(_stun_anim_timer, 0.16)
+				_stun_indicator.frame = 1 if _stun_indicator.frame == 0 else 0
+		if _knockback_lock_timer > 0.0:
+			_knockback_lock_timer = maxf(0.0, _knockback_lock_timer - delta)
+		velocity.x = move_toward(velocity.x, 0.0, knockback_friction * delta)
+		move_and_slide()
+		if _stun_timer <= 0.0:
+			if _stun_indicator != null:
+				_stun_indicator.visible = false
+			if enemy_hitbox != null and not _is_dead:
+				enemy_hitbox.set_active(contact_damage_enabled)
+		return
+
 	if _knockback_lock_timer > 0.0:
 		_knockback_lock_timer = maxf(0.0, _knockback_lock_timer - delta)
 		velocity.x = move_toward(velocity.x, 0.0, knockback_friction * delta)
@@ -78,6 +102,41 @@ func _physics_process(delta: float) -> void:
 func apply_hitstop(duration: float) -> void:
 	if duration > 0.0 and not _is_dead:
 		_hitstop_timer = maxf(_hitstop_timer, duration)
+
+
+func is_stunned() -> bool:
+	return _stun_timer > 0.0 and not _is_dead
+
+
+func apply_stun(duration: float) -> void:
+	if duration <= 0.0 or _is_dead:
+		return
+	_stun_timer = maxf(_stun_timer, duration)
+	_stun_anim_timer = 0.0
+	if enemy_hitbox != null:
+		enemy_hitbox.set_active(false)
+	var ind: Sprite2D = _ensure_stun_indicator()
+	if ind != null:
+		ind.visible = true
+		ind.frame = 0
+
+
+func _ensure_stun_indicator() -> Sprite2D:
+	if _stun_indicator != null and is_instance_valid(_stun_indicator):
+		return _stun_indicator
+	var spr: Sprite2D = Sprite2D.new()
+	spr.name = "StunStars"
+	spr.texture = STUN_STARS_TEX
+	spr.hframes = 2
+	spr.frame = 0
+	spr.scale = Vector2.ONE
+	spr.z_index = 5
+	spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	spr.position = Vector2(0.0, -31.0)
+	spr.visible = false
+	add_child(spr)
+	_stun_indicator = spr
+	return _stun_indicator
 
 
 func _on_hurt(hitbox: HitboxComponent, _actual_damage: int, knockback: Vector2) -> void:
@@ -117,6 +176,9 @@ func _on_died() -> void:
 		return
 	_is_dead = true
 	_hitstop_timer = 0.0
+	_stun_timer = 0.0
+	if _stun_indicator != null and is_instance_valid(_stun_indicator):
+		_stun_indicator.visible = false
 	velocity = Vector2.ZERO
 	if enemy_hitbox != null:
 		enemy_hitbox.set_active(false)

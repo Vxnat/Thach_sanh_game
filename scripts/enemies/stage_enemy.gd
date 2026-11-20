@@ -1,12 +1,17 @@
 class_name StageEnemy
 extends CharacterBody2D
-## Lớp nền chung cho Quái Màn 1: đồng bộ EnemyData, StatsComponent ngày/đêm, Hazard, EXP & LootPickup.
+## Lớp nền chung cho Quái: đồng bộ EnemyData, StatsComponent ngày/đêm, Choáng (Stun), Hazard, EXP & LootPickup.
+
+const STUN_STARS_TEX: Texture2D = preload("res://assets/sprites/vfx/stun_stars.png")
 
 @export var enemy_data: EnemyData
 @export var patrol_enabled: bool = true
 @export var gravity: float = 980.0
 @export var knockback_friction: float = 650.0
 @export var abyss_kill_y: float = 420.0
+@export var hp_bar_max_width: float = 16.0
+@export var ledge_ray_offset_x: float = 10.0
+@export var stun_stars_offset: Vector2 = Vector2(0.0, -28.0)
 
 @onready var visual_root: Node2D = $VisualRoot
 @onready var body_sprite: Sprite2D = $VisualRoot/BodySprite
@@ -22,17 +27,22 @@ var _spawn_x: float = 0.0
 var _facing_dir: int = -1
 var _knockback_lock_timer: float = 0.0
 var _hitstop_timer: float = 0.0
+var _stun_timer: float = 0.0
+var _stun_anim_timer: float = 0.0
 var _attack_cooldown_timer: float = 0.0
 var _state_timer: float = 0.0
+var _anim_timer: float = 0.0
 var _is_dead: bool = false
 var _drowned_in_hazard: bool = false
 var _flash_tween: Tween = null
+var _stun_indicator: Sprite2D = null
 
 
 func _ready() -> void:
 	collision_layer = 4  # Layer 3: EnemyBody
 	collision_mask = 1   # Layer 1: World (xuyên thân PlayerBody)
 	_spawn_x = global_position.x
+	_anim_timer = fmod(absf(global_position.x * 0.019), 0.45)
 
 	if enemy_data != null:
 		if stats_component != null:
@@ -93,6 +103,25 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y = minf(velocity.y + gravity * delta, 360.0)
 
+	if _stun_timer > 0.0:
+		_stun_timer = maxf(0.0, _stun_timer - delta)
+		_stun_anim_timer += delta
+		if _stun_indicator != null:
+			_stun_indicator.visible = true
+			if _stun_anim_timer >= 0.16:
+				_stun_anim_timer = fmod(_stun_anim_timer, 0.16)
+				_stun_indicator.frame = 1 if _stun_indicator.frame == 0 else 0
+		if _knockback_lock_timer > 0.0:
+			_knockback_lock_timer = maxf(0.0, _knockback_lock_timer - delta)
+		velocity.x = move_toward(velocity.x, 0.0, knockback_friction * delta)
+		move_and_slide()
+		if _stun_timer <= 0.0:
+			if _stun_indicator != null:
+				_stun_indicator.visible = false
+			if enemy_hitbox != null and not _is_dead:
+				enemy_hitbox.set_active(true)
+		return
+
 	if _knockback_lock_timer > 0.0:
 		_knockback_lock_timer = maxf(0.0, _knockback_lock_timer - delta)
 		velocity.x = move_toward(velocity.x, 0.0, knockback_friction * delta)
@@ -108,6 +137,16 @@ func _step_ai(delta: float) -> void:
 		_move_patrol(spd)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, knockback_friction * delta)
+
+
+func update_patrol_idle_anim(delta: float, move_interval: float = 0.17, idle_interval: float = 0.48) -> void:
+	if body_sprite == null:
+		return
+	var interval: float = move_interval if absf(velocity.x) > 2.0 else idle_interval
+	_anim_timer += delta
+	if _anim_timer >= interval:
+		_anim_timer = fmod(_anim_timer, interval)
+		body_sprite.frame = 1 if body_sprite.frame == 0 else 0
 
 
 func _move_patrol(speed: float) -> void:
@@ -143,7 +182,7 @@ func _move_toward_x(target_x: float, speed: float) -> void:
 func _is_at_ledge() -> bool:
 	if ledge_ray == null:
 		return false
-	ledge_ray.position.x = 10.0 * float(_facing_dir)
+	ledge_ray.position.x = ledge_ray_offset_x * float(_facing_dir)
 	ledge_ray.force_raycast_update()
 	return not ledge_ray.is_colliding()
 
@@ -153,7 +192,7 @@ func _apply_facing(dir: int) -> void:
 	if visual_root != null:
 		visual_root.scale.x = float(_facing_dir)
 	if ledge_ray != null:
-		ledge_ray.position.x = 10.0 * float(_facing_dir)
+		ledge_ray.position.x = ledge_ray_offset_x * float(_facing_dir)
 
 
 func _find_alive_player() -> Node2D:
@@ -186,6 +225,46 @@ func apply_hitstop(duration: float) -> void:
 		_hitstop_timer = maxf(_hitstop_timer, duration)
 
 
+func is_stunned() -> bool:
+	return _stun_timer > 0.0 and not _is_dead
+
+
+func apply_stun(duration: float) -> void:
+	if duration <= 0.0 or _is_dead:
+		return
+	_stun_timer = maxf(_stun_timer, duration)
+	_stun_anim_timer = 0.0
+	_on_stun_applied()
+	if enemy_hitbox != null:
+		enemy_hitbox.set_active(false)
+	var ind: Sprite2D = _ensure_stun_indicator()
+	if ind != null:
+		ind.visible = true
+		ind.frame = 0
+
+
+func _on_stun_applied() -> void:
+	_on_hurt_interrupted()
+
+
+func _ensure_stun_indicator() -> Sprite2D:
+	if _stun_indicator != null and is_instance_valid(_stun_indicator):
+		return _stun_indicator
+	var spr: Sprite2D = Sprite2D.new()
+	spr.name = "StunStars"
+	spr.texture = STUN_STARS_TEX
+	spr.hframes = 2
+	spr.frame = 0
+	spr.scale = Vector2.ONE
+	spr.z_index = 5
+	spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	spr.position = stun_stars_offset
+	spr.visible = false
+	add_child(spr)
+	_stun_indicator = spr
+	return _stun_indicator
+
+
 func _on_stats_recalculated(effective_atk: int, _effective_speed: float, is_night_buffed: bool) -> void:
 	if enemy_hitbox != null:
 		enemy_hitbox.damage = effective_atk
@@ -194,7 +273,7 @@ func _on_stats_recalculated(effective_atk: int, _effective_speed: float, is_nigh
 
 func _update_night_visual(is_night_buffed: bool) -> void:
 	if body_sprite != null:
-		body_sprite.modulate = Color(1.12, 0.88, 1.24, 1.0) if is_night_buffed else Color.WHITE
+		body_sprite.modulate = Color(1.16, 1.02, 1.26, 1.0) if is_night_buffed else Color.WHITE
 
 
 func _on_hurt(hitbox: HitboxComponent, _actual_damage: int, knockback: Vector2) -> void:
@@ -219,7 +298,7 @@ func _update_hp_bar() -> void:
 	if hp_bar_fill == null or health_component == null:
 		return
 	var ratio: float = float(health_component.current_hp) / float(maxi(1, health_component.max_hp))
-	hp_bar_fill.size.x = 16.0 * clampf(ratio, 0.0, 1.0)
+	hp_bar_fill.size.x = hp_bar_max_width * clampf(ratio, 0.0, 1.0)
 
 
 func _play_hit_flash() -> void:
@@ -248,6 +327,9 @@ func _on_died() -> void:
 		return
 	_is_dead = true
 	_hitstop_timer = 0.0
+	_stun_timer = 0.0
+	if _stun_indicator != null and is_instance_valid(_stun_indicator):
+		_stun_indicator.visible = false
 	velocity = Vector2.ZERO
 
 	if enemy_hitbox != null:

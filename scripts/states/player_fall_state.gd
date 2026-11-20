@@ -21,6 +21,11 @@ func physics_update(delta: float) -> void:
 		state_machine.transition_to(&"Dash")
 		return
 
+	var relic_id: StringName = player.try_consume_buffered_relic()
+	if relic_id != &"":
+		state_machine.transition_to(&"RelicCast", {"relic_id": relic_id})
+		return
+
 	if player.has_buffered_attack():
 		state_machine.transition_to(&"AirAttack")
 		return
